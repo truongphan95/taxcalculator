@@ -1,146 +1,153 @@
+
 <!DOCTYPE html>
-<html lang="vi">
+<html lang="ja">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>HSB JAPAN — 税金計算ツール / Tax & Refund Calculator / Công cụ tính thuế 2025</title>
+<title>HSB JAPAN — 税金計算ツール / Tax & Refund Calculator / Công cụ tính thuế</title>
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
   :root {
-    --bg: #ffffff; --bg2: #f7f7f5; --bg3: #f0efe9;
-    --text: #1a1a18; --text2: #5a5a56; --text3: #9a9994;
-    --border: rgba(0,0,0,0.12); --border2: rgba(0,0,0,0.22);
-    --blue-bg: #e6f1fb; --blue-text: #0c447c; --blue-border: #185fa5;
-    --amber-bg: #faeeda; --amber-text: #633806; --amber-border: #ba7517;
-    --green-bg: #eaf3de; --green-text: #27500a; --green-border: #3b6d11;
-    --red-bg: #fcebeb; --red-text: #791f1f; --red-border: #a32d2d;
-    --info-bg: #e6f1fb; --info-text: #0c447c;
-    --warn-bg: #faeeda; --warn-text: #633806;
-    --success-bg: #eaf3de; --success-text: #27500a;
-    --danger-bg: #fcebeb; --danger-text: #791f1f;
-    --radius: 8px; --radius-lg: 12px;
-    --shadow: 0 1px 3px rgba(0,0,0,0.08), 0 0 0 0.5px rgba(0,0,0,0.1);
+    --bg:#ffffff;--bg2:#f7f7f5;--bg3:#f0efe9;
+    --text:#1a1a18;--text2:#5a5a56;--text3:#9a9994;
+    --border:rgba(0,0,0,0.12);--border2:rgba(0,0,0,0.22);
+    --blue-bg:#e6f1fb;--blue-text:#0c447c;--blue-border:#185fa5;
+    --amber-bg:#faeeda;--amber-text:#633806;--amber-border:#ba7517;
+    --green-bg:#eaf3de;--green-text:#27500a;--green-border:#3b6d11;
+    --red-bg:#fcebeb;--red-text:#791f1f;--red-border:#a32d2d;
+    --info-bg:#e6f1fb;--info-text:#0c447c;
+    --warn-bg:#faeeda;--warn-text:#633806;
+    --success-bg:#eaf3de;--success-text:#27500a;
+    --danger-bg:#fcebeb;--danger-text:#791f1f;
+    --radius:8px;--radius-lg:12px;
+    --shadow:0 1px 3px rgba(0,0,0,0.08),0 0 0 0.5px rgba(0,0,0,0.1);
   }
-  @media (prefers-color-scheme: dark) {
-    :root {
-      --bg: #1e1e1c; --bg2: #2a2a27; --bg3: #333330;
-      --text: #e8e6de; --text2: #9a9890; --text3: #6a6860;
-      --border: rgba(255,255,255,0.1); --border2: rgba(255,255,255,0.2);
-      --blue-bg: #042c53; --blue-text: #b5d4f4; --blue-border: #185fa5;
-      --amber-bg: #412402; --amber-text: #fac775; --amber-border: #ba7517;
-      --green-bg: #173404; --green-text: #c0dd97; --green-border: #3b6d11;
-      --red-bg: #501313; --red-text: #f7c1c1; --red-border: #a32d2d;
-      --info-bg: #042c53; --info-text: #b5d4f4;
-      --warn-bg: #412402; --warn-text: #fac775;
-      --success-bg: #173404; --success-text: #c0dd97;
-      --danger-bg: #501313; --danger-text: #f7c1c1;
-      --shadow: 0 1px 3px rgba(0,0,0,0.3), 0 0 0 0.5px rgba(255,255,255,0.06);
-    }
-  }
-  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif; background: var(--bg3); color: var(--text); min-height: 100vh; padding: 24px 16px 48px; font-size: 14px; line-height: 1.5; }
-  .page-wrap { max-width: 720px; margin: 0 auto; }
-
-  /* Top bar */
-  .top-bar { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; }
-  .logo-mark { width: 36px; height: 36px; background: #1a3a6b; border-radius: 8px; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 16px; font-weight: 700; flex-shrink: 0; }
-  .top-bar h1 { font-size: 16px; font-weight: 600; }
-  .top-bar p { font-size: 12px; color: var(--text2); margin-top: 1px; }
-
-  /* Lang switcher */
-  .lang-bar { display: flex; gap: 6px; align-items: center; margin-bottom: 16px; padding: 10px 14px; background: var(--bg); border-radius: var(--radius-lg); box-shadow: var(--shadow); }
-  .lang-bar span { font-size: 11px; color: var(--text2); margin-right: 4px; font-weight: 500; }
-  .lang-btn { padding: 5px 12px; border-radius: 20px; border: 0.5px solid var(--border2); background: transparent; color: var(--text2); font-size: 12px; font-weight: 500; cursor: pointer; transition: all .15s; }
-  .lang-btn:hover { background: var(--bg2); }
-  .lang-btn.active { background: #1a3a6b; color: #fff; border-color: #1a3a6b; }
-
-  .badge { font-size: 11px; font-weight: 500; padding: 3px 9px; border-radius: 20px; background: var(--info-bg); color: var(--info-text); border: 0.5px solid var(--blue-border); white-space: nowrap; margin-left: auto; }
-  .card { background: var(--bg); border-radius: var(--radius-lg); box-shadow: var(--shadow); padding: 20px; margin-bottom: 16px; }
-  .card-title { font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: .06em; color: var(--text2); margin-bottom: 14px; display: flex; align-items: center; gap: 6px; }
-  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-  .grid3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
-  @media (max-width: 540px) { .grid2, .grid3 { grid-template-columns: 1fr; } }
-  .field { display: flex; flex-direction: column; gap: 5px; }
-  .field label { font-size: 12px; color: var(--text2); font-weight: 500; }
-  .field .hint { font-size: 11px; color: var(--text3); }
-  input[type=number], select { width: 100%; padding: 8px 10px; border: 0.5px solid var(--border2); border-radius: var(--radius); background: var(--bg); color: var(--text); font-size: 14px; outline: none; transition: border-color .15s; appearance: none; -webkit-appearance: none; }
-  input[type=number]:focus, select:focus { border-color: #185fa5; box-shadow: 0 0 0 3px rgba(24,95,165,0.12); }
-  select { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23888' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 10px center; padding-right: 28px; cursor: pointer; }
-  .toggle-row { display: flex; align-items: center; gap: 10px; padding: 10px 12px; background: var(--bg2); border-radius: var(--radius); border: 0.5px solid var(--border); cursor: pointer; margin-bottom: 16px; }
-  .toggle-row input[type=checkbox] { width: 16px; height: 16px; accent-color: #185fa5; cursor: pointer; flex-shrink: 0; }
-  .toggle-row label { font-size: 13px; color: var(--text2); cursor: pointer; flex: 1; }
-  .fuyou-table { width: 100%; border-collapse: collapse; }
-  .fuyou-table th { font-size: 11px; font-weight: 600; color: var(--text2); text-align: left; padding: 0 6px 8px; border-bottom: 0.5px solid var(--border2); }
-  .fuyou-table th:nth-child(2), .fuyou-table th:nth-child(3) { text-align: center; }
-  .fuyou-table td { padding: 8px 6px; border-bottom: 0.5px solid var(--border); vertical-align: middle; }
-  .fuyou-table tr:last-child td { border-bottom: none; }
-  .fuyou-label { font-size: 13px; }
-  .fuyou-sub { font-size: 11px; color: var(--text3); margin-top: 2px; }
-  .fuyou-kojo { font-size: 12px; font-weight: 600; color: var(--info-text); text-align: center; }
-  .fuyou-num { width: 64px; text-align: center; }
-  .btn-primary { width: 100%; padding: 12px; background: #1a3a6b; color: #fff; border: none; border-radius: var(--radius); font-size: 15px; font-weight: 600; cursor: pointer; transition: background .15s, transform .1s; display: flex; align-items: center; justify-content: center; gap: 8px; margin-top: 4px; }
-  .btn-primary:hover { background: #142d54; }
-  .btn-primary:active { transform: scale(0.99); }
-  .btn-secondary { padding: 7px 14px; background: transparent; color: var(--text2); border: 0.5px solid var(--border2); border-radius: var(--radius); font-size: 12px; cursor: pointer; transition: background .15s; display: inline-flex; align-items: center; gap: 5px; }
-  .btn-secondary:hover { background: var(--bg2); }
-  .result-hidden { display: none; }
-  .metrics-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-bottom: 16px; }
-  @media (max-width: 540px) { .metrics-row { grid-template-columns: repeat(2, 1fr); } }
-  .metric { background: var(--bg2); border-radius: var(--radius); padding: 10px 12px; text-align: center; }
-  .metric .m-lbl { font-size: 11px; color: var(--text2); line-height: 1.4; }
-  .metric .m-val { font-size: 16px; font-weight: 600; color: var(--text); margin-top: 4px; }
-  .metric.m-blue { background: var(--blue-bg); border: 0.5px solid var(--blue-border); }
-  .metric.m-blue .m-lbl, .metric.m-blue .m-val { color: var(--blue-text); }
-  .metric.m-amber { background: var(--amber-bg); border: 0.5px solid var(--amber-border); }
-  .metric.m-amber .m-lbl, .metric.m-amber .m-val { color: var(--amber-text); }
-  .tax-split { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 20px; }
-  @media (max-width: 480px) { .tax-split { grid-template-columns: 1fr; } }
-  .tax-block { border-radius: var(--radius); padding: 14px 16px; border: 0.5px solid var(--border); }
-  .tax-block.income-block { background: var(--blue-bg); border-color: var(--blue-border); }
-  .tax-block.jumin-block { background: var(--amber-bg); border-color: var(--amber-border); }
-  .tax-block .tb-head { font-size: 11px; font-weight: 600; margin-bottom: 4px; display: flex; align-items: center; gap: 5px; }
-  .income-block .tb-head { color: var(--blue-text); }
-  .jumin-block .tb-head { color: var(--amber-text); }
-  .tax-block .tb-sub-label { font-size: 10px; opacity: .75; margin-bottom: 6px; }
-  .income-block .tb-sub-label { color: var(--blue-text); }
-  .jumin-block .tb-sub-label { color: var(--amber-text); }
-  .tax-block .tb-amount { font-size: 22px; font-weight: 700; margin-bottom: 8px; }
-  .income-block .tb-amount { color: var(--blue-text); }
-  .jumin-block .tb-amount { color: var(--amber-text); }
-  .tax-block .tb-rows { font-size: 12px; line-height: 1.8; }
-  .income-block .tb-rows { color: var(--blue-text); opacity: 0.85; }
-  .jumin-block .tb-rows { color: var(--amber-text); opacity: 0.85; }
-  .detail-table { width: 100%; border-collapse: collapse; font-size: 13px; }
-  .detail-table td { padding: 5px 4px; border-bottom: 0.5px solid var(--border); color: var(--text2); }
-  .detail-table td:last-child { text-align: right; font-weight: 500; color: var(--text); }
-  .detail-table tr.dt-group td { font-size: 11px; color: var(--text3); padding-top: 10px; border-bottom: none; font-weight: 600; }
-  .detail-table tr.dt-income td { color: var(--blue-text); }
-  .detail-table tr.dt-income td:last-child { color: var(--blue-text); }
-  .detail-table tr.dt-jumin td { color: var(--amber-text); }
-  .detail-table tr.dt-jumin td:last-child { color: var(--amber-text); }
-  .detail-table tr.dt-total td { font-weight: 600; color: var(--text); border-bottom: none; padding-top: 10px; font-size: 14px; }
-  .detail-table tr.dt-total td:last-child { color: var(--green-text); }
-  .sdiv-income { font-size: 11px; font-weight: 600; color: var(--blue-text); background: var(--blue-bg); padding: 3px 6px; border-radius: 4px; display: inline-block; margin-bottom: 2px; }
-  .sdiv-jumin { font-size: 11px; font-weight: 600; color: var(--amber-text); background: var(--amber-bg); padding: 3px 6px; border-radius: 4px; display: inline-block; margin-bottom: 2px; }
-  .kakutei-box { background: var(--success-bg); border: 0.5px solid var(--green-border); border-radius: var(--radius); padding: 14px 16px; margin-top: 12px; }
-  .kakutei-box .k-title { font-size: 12px; font-weight: 600; color: var(--success-text); margin-bottom: 4px; }
-  .kakutei-box .k-note { font-size: 11px; color: var(--success-text); opacity: .8; margin-bottom: 6px; }
-  .kakutei-box .k-amount { font-size: 26px; font-weight: 700; color: var(--success-text); }
-  .kakutei-box .k-sub { font-size: 12px; color: var(--success-text); margin-top: 5px; opacity: .85; }
-  .info-box { border-radius: var(--radius); padding: 10px 14px; margin-top: 10px; font-size: 12px; line-height: 1.6; display: flex; gap: 8px; align-items: flex-start; }
-  .info-box svg { flex-shrink: 0; margin-top: 1px; }
-  .info-box.ib-info { background: var(--info-bg); color: var(--info-text); border: 0.5px solid var(--blue-border); }
-  .info-box.ib-warn { background: var(--warn-bg); color: var(--warn-text); border: 0.5px solid var(--amber-border); }
-  .info-box.ib-success { background: var(--success-bg); color: var(--success-text); border: 0.5px solid var(--green-border); }
-  .info-box.ib-danger { background: var(--danger-bg); color: var(--danger-text); border: 0.5px solid var(--red-border); }
-  .result-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; }
-  .result-header .rh-title { font-size: 13px; font-weight: 600; color: var(--text2); }
-  .hidden { display: none !important; }
-  .footer { text-align: center; font-size: 11px; color: var(--text3); margin-top: 32px; }
-  @media print {
-    body { background: #fff; padding: 0; }
-    .btn-primary, .btn-secondary, .no-print, .lang-bar { display: none !important; }
-    .card { box-shadow: none; border: 0.5px solid #ccc; }
-    .result-hidden { display: block !important; }
+  @media (prefers-color-scheme:dark){:root{
+    --bg:#1e1e1c;--bg2:#2a2a27;--bg3:#333330;
+    --text:#e8e6de;--text2:#9a9890;--text3:#6a6860;
+    --border:rgba(255,255,255,0.1);--border2:rgba(255,255,255,0.2);
+    --blue-bg:#042c53;--blue-text:#b5d4f4;--blue-border:#185fa5;
+    --amber-bg:#412402;--amber-text:#fac775;--amber-border:#ba7517;
+    --green-bg:#173404;--green-text:#c0dd97;--green-border:#3b6d11;
+    --red-bg:#501313;--red-text:#f7c1c1;--red-border:#a32d2d;
+    --info-bg:#042c53;--info-text:#b5d4f4;
+    --warn-bg:#412402;--warn-text:#fac775;
+    --success-bg:#173404;--success-text:#c0dd97;
+    --danger-bg:#501313;--danger-text:#f7c1c1;
+    --shadow:0 1px 3px rgba(0,0,0,0.3),0 0 0 0.5px rgba(255,255,255,0.06);
+  }}
+  body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Helvetica Neue',Arial,sans-serif;background:var(--bg3);color:var(--text);min-height:100vh;padding:24px 16px 48px;font-size:14px;line-height:1.5;}
+  .page-wrap{max-width:720px;margin:0 auto;}
+  .top-bar{display:flex;align-items:center;gap:12px;margin-bottom:16px;}
+  .logo-mark{width:36px;height:36px;background:#1a3a6b;border-radius:8px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:16px;font-weight:700;flex-shrink:0;}
+  .top-bar h1{font-size:16px;font-weight:600;}
+  .top-bar p{font-size:12px;color:var(--text2);margin-top:1px;}
+  .lang-bar{display:flex;gap:6px;align-items:center;margin-bottom:16px;padding:10px 14px;background:var(--bg);border-radius:var(--radius-lg);box-shadow:var(--shadow);}
+  .lang-bar span{font-size:11px;color:var(--text2);margin-right:4px;font-weight:500;}
+  .lang-btn{padding:5px 12px;border-radius:20px;border:0.5px solid var(--border2);background:transparent;color:var(--text2);font-size:12px;font-weight:500;cursor:pointer;transition:all .15s;}
+  .lang-btn:hover{background:var(--bg2);}
+  .lang-btn.active{background:#1a3a6b;color:#fff;border-color:#1a3a6b;}
+  .badge{font-size:11px;font-weight:500;padding:3px 9px;border-radius:20px;background:var(--info-bg);color:var(--info-text);border:0.5px solid var(--blue-border);white-space:nowrap;margin-left:auto;}
+  .card{background:var(--bg);border-radius:var(--radius-lg);box-shadow:var(--shadow);padding:20px;margin-bottom:16px;}
+  .card-title{font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--text2);margin-bottom:14px;display:flex;align-items:center;gap:6px;}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+  .grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;}
+  @media(max-width:540px){.grid2,.grid3{grid-template-columns:1fr;}}
+  .field{display:flex;flex-direction:column;gap:5px;}
+  .field label{font-size:12px;color:var(--text2);font-weight:500;}
+  .field .hint{font-size:11px;color:var(--text3);}
+  input[type=number],select{width:100%;padding:8px 10px;border:0.5px solid var(--border2);border-radius:var(--radius);background:var(--bg);color:var(--text);font-size:14px;outline:none;transition:border-color .15s;appearance:none;-webkit-appearance:none;}
+  input[type=number]:focus,select:focus{border-color:#185fa5;box-shadow:0 0 0 3px rgba(24,95,165,0.12);}
+  select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23888' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 10px center;padding-right:28px;cursor:pointer;}
+  .toggle-row{display:flex;align-items:center;gap:10px;padding:10px 12px;background:var(--bg2);border-radius:var(--radius);border:0.5px solid var(--border);cursor:pointer;margin-bottom:16px;}
+  .toggle-row input[type=checkbox]{width:16px;height:16px;accent-color:#185fa5;cursor:pointer;flex-shrink:0;}
+  .toggle-row label{font-size:13px;color:var(--text2);cursor:pointer;flex:1;}
+  .fuyou-table{width:100%;border-collapse:collapse;}
+  .fuyou-table th{font-size:11px;font-weight:600;color:var(--text2);text-align:left;padding:0 6px 8px;border-bottom:0.5px solid var(--border2);}
+  .fuyou-table th:nth-child(2),.fuyou-table th:nth-child(3){text-align:center;}
+  .fuyou-table td{padding:7px 6px;border-bottom:0.5px solid var(--border);vertical-align:middle;}
+  .fuyou-table tr:last-child td{border-bottom:none;}
+  .fuyou-label{font-size:13px;}
+  .fuyou-sub{font-size:11px;color:var(--text3);margin-top:2px;}
+  .fuyou-amt-pair{display:flex;flex-direction:column;align-items:center;gap:2px;}
+  .fuyou-amt-shotoku{font-size:12px;font-weight:600;color:var(--blue-text);}
+  .fuyou-amt-jumin{font-size:11px;color:var(--amber-text);}
+  .fuyou-num{width:60px;text-align:center;}
+  .btn-primary{width:100%;padding:12px;background:#1a3a6b;color:#fff;border:none;border-radius:var(--radius);font-size:15px;font-weight:600;cursor:pointer;transition:background .15s,transform .1s;display:flex;align-items:center;justify-content:center;gap:8px;margin-top:4px;}
+  .btn-primary:hover{background:#142d54;}
+  .btn-primary:active{transform:scale(0.99);}
+  .btn-secondary{padding:7px 14px;background:transparent;color:var(--text2);border:0.5px solid var(--border2);border-radius:var(--radius);font-size:12px;cursor:pointer;transition:background .15s;display:inline-flex;align-items:center;gap:5px;}
+  .btn-secondary:hover{background:var(--bg2);}
+  .result-hidden{display:none;}
+  .metrics-row{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:16px;}
+  @media(max-width:540px){.metrics-row{grid-template-columns:repeat(2,1fr);}}
+  .metric{background:var(--bg2);border-radius:var(--radius);padding:10px 12px;text-align:center;}
+  .metric .m-lbl{font-size:11px;color:var(--text2);line-height:1.4;}
+  .metric .m-val{font-size:16px;font-weight:600;color:var(--text);margin-top:4px;}
+  .metric.m-blue{background:var(--blue-bg);border:0.5px solid var(--blue-border);}
+  .metric.m-blue .m-lbl,.metric.m-blue .m-val{color:var(--blue-text);}
+  .metric.m-amber{background:var(--amber-bg);border:0.5px solid var(--amber-border);}
+  .metric.m-amber .m-lbl,.metric.m-amber .m-val{color:var(--amber-text);}
+  .tax-split{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px;}
+  @media(max-width:480px){.tax-split{grid-template-columns:1fr;}}
+  .tax-block{border-radius:var(--radius);padding:14px 16px;border:0.5px solid var(--border);}
+  .tax-block.income-block{background:var(--blue-bg);border-color:var(--blue-border);}
+  .tax-block.jumin-block{background:var(--amber-bg);border-color:var(--amber-border);}
+  .tax-block .tb-head{font-size:11px;font-weight:600;margin-bottom:3px;display:flex;align-items:center;gap:5px;}
+  .income-block .tb-head{color:var(--blue-text);}
+  .jumin-block .tb-head{color:var(--amber-text);}
+  .tax-block .tb-sub-label{font-size:10px;opacity:.75;margin-bottom:6px;}
+  .income-block .tb-sub-label{color:var(--blue-text);}
+  .jumin-block .tb-sub-label{color:var(--amber-text);}
+  .tax-block .tb-amount{font-size:22px;font-weight:700;margin-bottom:8px;}
+  .income-block .tb-amount{color:var(--blue-text);}
+  .jumin-block .tb-amount{color:var(--amber-text);}
+  .tax-block .tb-rows{font-size:12px;line-height:1.8;}
+  .income-block .tb-rows{color:var(--blue-text);opacity:.85;}
+  .jumin-block .tb-rows{color:var(--amber-text);opacity:.85;}
+  .detail-table{width:100%;border-collapse:collapse;font-size:13px;}
+  .detail-table td{padding:5px 4px;border-bottom:0.5px solid var(--border);color:var(--text2);}
+  .detail-table td:last-child{text-align:right;font-weight:500;color:var(--text);}
+  .detail-table tr.dt-group td{font-size:11px;color:var(--text3);padding-top:10px;border-bottom:none;font-weight:600;}
+  .detail-table tr.dt-income td{color:var(--blue-text);}
+  .detail-table tr.dt-income td:last-child{color:var(--blue-text);}
+  .detail-table tr.dt-jumin td{color:var(--amber-text);}
+  .detail-table tr.dt-jumin td:last-child{color:var(--amber-text);}
+  .detail-table tr.dt-total td{font-weight:600;color:var(--text);border-bottom:none;padding-top:10px;font-size:14px;}
+  .detail-table tr.dt-total td:last-child{color:var(--green-text);}
+  .sdiv-income{font-size:11px;font-weight:600;color:var(--blue-text);background:var(--blue-bg);padding:3px 6px;border-radius:4px;display:inline-block;margin-bottom:2px;}
+  .sdiv-jumin{font-size:11px;font-weight:600;color:var(--amber-text);background:var(--amber-bg);padding:3px 6px;border-radius:4px;display:inline-block;margin-bottom:2px;}
+  .kakutei-box{background:var(--success-bg);border:0.5px solid var(--green-border);border-radius:var(--radius);padding:14px 16px;margin-top:12px;}
+  .kakutei-box .k-title{font-size:12px;font-weight:600;color:var(--success-text);margin-bottom:4px;}
+  .kakutei-box .k-note{font-size:11px;color:var(--success-text);opacity:.8;margin-bottom:6px;}
+  .kakutei-box .k-amount{font-size:26px;font-weight:700;color:var(--success-text);}
+  .kakutei-box .k-sub{font-size:12px;color:var(--success-text);margin-top:5px;opacity:.85;}
+  .info-box{border-radius:var(--radius);padding:10px 14px;margin-top:10px;font-size:12px;line-height:1.6;display:flex;gap:8px;align-items:flex-start;}
+  .info-box svg{flex-shrink:0;margin-top:1px;}
+  .info-box.ib-info{background:var(--info-bg);color:var(--info-text);border:0.5px solid var(--blue-border);}
+  .info-box.ib-warn{background:var(--warn-bg);color:var(--warn-text);border:0.5px solid var(--amber-border);}
+  .info-box.ib-success{background:var(--success-bg);color:var(--success-text);border:0.5px solid var(--green-border);}
+  .info-box.ib-danger{background:var(--danger-bg);color:var(--danger-text);border:0.5px solid var(--red-border);}
+  .result-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;}
+  .result-header .rh-title{font-size:13px;font-weight:600;color:var(--text2);}
+  /* 住民税 detail box */
+  .jumin-detail-box{background:var(--amber-bg);border:0.5px solid var(--amber-border);border-radius:var(--radius);padding:12px 14px;margin-top:10px;}
+  .jumin-detail-box .jdb-title{font-size:11px;font-weight:600;color:var(--amber-text);margin-bottom:8px;display:flex;align-items:center;gap:5px;}
+  .jdb-table{width:100%;border-collapse:collapse;font-size:12px;}
+  .jdb-table td{padding:4px 4px;border-bottom:0.5px solid var(--amber-border);color:var(--amber-text);opacity:.9;}
+  .jdb-table td:last-child{text-align:right;font-weight:500;opacity:1;}
+  .jdb-table tr:last-child td{border-bottom:none;}
+  .jdb-table tr.jdb-total td{font-weight:700;font-size:13px;padding-top:8px;border-bottom:none;opacity:1;}
+  /* fuyou comparison columns */
+  .col-shotoku{color:var(--blue-text);font-size:11px;font-weight:600;}
+  .col-jumin{color:var(--amber-text);font-size:11px;font-weight:600;}
+  .hidden{display:none !important;}
+  .footer{text-align:center;font-size:11px;color:var(--text3);margin-top:32px;}
+  @media print{
+    body{background:#fff;padding:0;}
+    .btn-primary,.btn-secondary,.no-print,.lang-bar{display:none !important;}
+    .card{box-shadow:none;border:0.5px solid #ccc;}
+    .result-hidden{display:block !important;}
   }
 </style>
 </head>
@@ -150,25 +157,23 @@
   <div class="top-bar">
     <div class="logo-mark">H</div>
     <div>
-      <h1 id="ttl-main">Công cụ tính thuế &amp; hoàn thuế</h1>
-      <p id="ttl-sub">HSB JAPAN · Nội bộ tư vấn viên · Reiwa 7 (2025)</p>
+      <h1 id="ttl-main">税金・還付金計算ツール</h1>
+      <p id="ttl-sub">HSB JAPAN · 内部ツール · 令和7年（2025）</p>
     </div>
-    <span class="badge">v4.0 · 2025</span>
+    <span class="badge">v5.0 · 2025</span>
   </div>
 
-  <!-- Language switcher -->
   <div class="lang-bar no-print">
-    <span id="lang-label">🌐 Ngôn ngữ:</span>
-    <button class="lang-btn" id="btn-vi" onclick="setLang('vi')">🇻🇳 Việt–日本語</button>
-    <button class="lang-btn" id="btn-en" onclick="setLang('en')">🇬🇧 English–日本語</button>
-    <button class="lang-btn active" id="btn-ja" onclick="setLang('ja')">🇯🇵 日本語のみ</button>
+    <span id="lang-label">🌐 言語:</span>
+    <button class="lang-btn" id="btn-vi" onclick="setLang('vi')">Tiếng Việt–日本語</button>
+    <button class="lang-btn" id="btn-en" onclick="setLang('en')">English–日本語</button>
+    <button class="lang-btn active" id="btn-ja" onclick="setLang('ja')">日本語のみ</button>
   </div>
 
-  <!-- Prior year toggle -->
   <div class="toggle-row" onclick="document.getElementById('priorYear').click()">
-    <input type="checkbox" id="priorYear" onclick="event.stopPropagation(); updateYearMode()">
-    <label for="priorYear" id="lbl-prioryear" onclick="event.stopPropagation()">📅 令和6年以前</label>
-    <span id="priorYearNote" class="badge hidden" style="background:var(--warn-bg);color:var(--warn-text);border-color:var(--amber-border)">~Reiwa 6 · 基礎控除 48万</span>
+    <input type="checkbox" id="priorYear" onclick="event.stopPropagation();updateYearMode()">
+    <label for="priorYear" id="lbl-prioryear" onclick="event.stopPropagation()">📅 令和6年以前 — 令和7年より前の年の税金を計算する（所得税 基礎控除: 48万円 / 住民税 基礎控除: 33万円）</label>
+    <span id="priorYearNote" class="badge hidden" style="background:var(--warn-bg);color:var(--warn-text);border-color:var(--amber-border)">~Reiwa 6</span>
   </div>
 
   <!-- Card 1: Income -->
@@ -179,7 +184,7 @@
     </div>
     <div class="grid2">
       <div class="field">
-        <label id="lbl-kyuyo">支払金額 (¥)</label>
+        <label id="lbl-kyuyo">支払金額（年収） (¥)</label>
         <input type="number" id="kyuyo" placeholder="例: 3500000" min="0" step="10000">
       </div>
       <div class="field">
@@ -225,19 +230,19 @@
       <div class="field">
         <label id="lbl-spouse-q">配偶者の有無</label>
         <select id="haigusha">
-          <option value="0" id="sp-none">なし / None / Không có</option>
-          <option value="380000" id="sp-normal">あり (収入 &lt; 900万¥) → 380,000¥</option>
-          <option value="480000" id="sp-old">配偶者70歳以上 → 480,000¥</option>
-          <option value="260000" id="sp-special">配偶者特別控除 → 260,000¥</option>
+          <option value="0,0" id="sp-none">なし / None / Không có</option>
+          <option value="380000,330000" id="sp-normal">あり（納税者収入 &lt; 900万¥）所得税 38万 / 住民税 33万</option>
+          <option value="480000,380000" id="sp-old">配偶者70歳以上 — 所得税 48万 / 住民税 38万</option>
+          <option value="260000,210000" id="sp-special">配偶者特別控除（収入 133〜155万¥）— 所得税 26万 / 住民税 21万</option>
         </select>
       </div>
       <div class="field">
-        <span class="hint" id="hint-spouse" style="margin-top:24px;line-height:1.7">配偶者控除は納税者の所得が1,000万円以下の場合に適用。配偶者の収入は133万円以下であること（令和7年）。</span>
+        <span class="hint" id="hint-spouse" style="margin-top:24px;line-height:1.7">配偶者控除は納税者の所得が1,000万円以下の場合に適用。配偶者の収入は133万円以下（令和7年）。住民税の配偶者控除額は所得税と異なります。</span>
       </div>
     </div>
   </div>
 
-  <!-- Card 4: Dependents -->
+  <!-- Card 4: Dependents — 3 groups -->
   <div class="card">
     <div class="card-title">
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>
@@ -247,38 +252,45 @@
       <thead>
         <tr>
           <th id="th-age">年齢区分</th>
-          <th id="th-count" style="width:70px">人数</th>
-          <th id="th-amount" style="width:130px">控除額/人</th>
+          <th id="th-count" style="width:64px">人数</th>
+          <th style="width:90px"><span class="col-shotoku">所得税</span></th>
+          <th style="width:90px"><span class="col-jumin">住民税</span></th>
         </tr>
       </thead>
       <tbody>
         <tr>
-          <td><div class="fuyou-label" id="dep-u16-lbl">16歳未満</div><div class="fuyou-sub">年少扶養親族 — 控除なし</div></td>
-          <td style="text-align:center"><input class="fuyou-num" type="number" id="f0" value="0" min="0" max="10"></td>
-          <td><div class="fuyou-kojo">0¥</div></td>
-        </tr>
-        <tr>
-          <td><div class="fuyou-label" id="dep-1618-lbl">16〜18歳</div><div class="fuyou-sub">一般控除対象扶養親族 (max 136万¥)</div></td>
+          <td>
+            <div class="fuyou-label" id="dep-ga-lbl">16〜18歳 · 23〜69歳</div>
+            <div class="fuyou-sub" id="dep-ga-sub">一般扶養親族</div>
+          </td>
           <td style="text-align:center"><input class="fuyou-num" type="number" id="f1" value="0" min="0" max="10"></td>
-          <td><div class="fuyou-kojo" id="dep-1618-amt">380,000¥/人</div></td>
+          <td style="text-align:center"><span class="col-shotoku" id="dep-ga-shotoku">38万¥/人</span></td>
+          <td style="text-align:center"><span class="col-jumin" id="dep-ga-jumin">33万¥/人</span></td>
         </tr>
         <tr>
-          <td><div class="fuyou-label" id="dep-1922-lbl">19〜22歳</div><div class="fuyou-sub">特定扶養親族 (max 136万¥)</div></td>
+          <td>
+            <div class="fuyou-label" id="dep-sp-lbl">19〜22歳</div>
+            <div class="fuyou-sub" id="dep-sp-sub">特定扶養親族</div>
+          </td>
           <td style="text-align:center"><input class="fuyou-num" type="number" id="f2" value="0" min="0" max="10"></td>
-          <td><div class="fuyou-kojo" id="dep-1922-amt">630,000¥/人</div></td>
+          <td style="text-align:center"><span class="col-shotoku" id="dep-sp-shotoku">63万¥/人</span></td>
+          <td style="text-align:center"><span class="col-jumin" id="dep-sp-jumin">45万¥/人</span></td>
         </tr>
         <tr>
-          <td><div class="fuyou-label" id="dep-1922b-lbl">19〜22歳（特定親族）</div><div class="fuyou-sub">特定親族特別控除 (max 159万¥)</div></td>
-          <td style="text-align:center"><input class="fuyou-num" type="number" id="f2b" value="0" min="0" max="10"></td>
-          <td><div class="fuyou-kojo" id="dep-1922b-amt">630,000¥/人</div></td>
-        </tr>
-        <tr>
-          <td><div class="fuyou-label" id="dep-23p-lbl">23歳以上</div><div class="fuyou-sub">一般控除対象扶養親族 (max 136万¥)</div></td>
+          <td>
+            <div class="fuyou-label" id="dep-70-lbl">70歳以上</div>
+            <div class="fuyou-sub" id="dep-70-sub">老人扶養親族（同居していない）</div>
+          </td>
           <td style="text-align:center"><input class="fuyou-num" type="number" id="f3" value="0" min="0" max="10"></td>
-          <td><div class="fuyou-kojo" id="dep-23p-amt">380,000¥/人</div></td>
+          <td style="text-align:center"><span class="col-shotoku" id="dep-70-shotoku">48万¥/人</span></td>
+          <td style="text-align:center"><span class="col-jumin" id="dep-70-jumin">38万¥/人</span></td>
         </tr>
       </tbody>
     </table>
+    <div class="info-box ib-info" style="margin-top:10px;font-size:11px;">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="flex-shrink:0;margin-top:1px"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
+      <span id="dep-note">住民税の扶養控除額は所得税と異なります。ツールは各グループの人数から所得税・住民税それぞれの控除額を自動計算します。</span>
+    </div>
   </div>
 
   <!-- Card 5: Kakutei -->
@@ -319,19 +331,19 @@
 
       <div class="metrics-row">
         <div class="metric">
-          <div class="m-lbl">給与所得<br><span class="m-sub" id="ms-shotoku"></span></div>
+          <div class="m-lbl">給与所得<br><span id="ms-shotoku" style="font-size:10px;opacity:.8"></span></div>
           <div class="m-val" id="m-shotoku">—</div>
         </div>
         <div class="metric">
-          <div class="m-lbl">課税所得金額<br><span class="m-sub" id="ms-kazei"></span></div>
+          <div class="m-lbl">課税所得（所得税）<br><span id="ms-kazei" style="font-size:10px;opacity:.8"></span></div>
           <div class="m-val" id="m-kazei">—</div>
         </div>
         <div class="metric m-blue">
-          <div class="m-lbl">所得税 + 復興税<br><span class="m-sub" id="ms-fukko"></span></div>
+          <div class="m-lbl">所得税 + 復興税<br><span id="ms-fukko" style="font-size:10px;opacity:.8"></span></div>
           <div class="m-val" id="m-fukko">—</div>
         </div>
         <div class="metric m-amber">
-          <div class="m-lbl">住民税<br><span class="m-sub" id="ms-jumin"></span></div>
+          <div class="m-lbl">住民税<br><span id="ms-jumin" style="font-size:10px;opacity:.8"></span></div>
           <div class="m-val" id="m-jumin">—</div>
         </div>
       </div>
@@ -357,13 +369,33 @@
         </div>
       </div>
 
-      <details style="margin-top:4px">
-        <summary style="font-size:12px;font-weight:600;color:var(--text2);cursor:pointer;padding:8px 0;user-select:none" id="detail-summary">明細を見る ▸</summary>
+      <!-- 住民税 独自課税所得 breakdown -->
+      <div class="jumin-detail-box">
+        <div class="jdb-title">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><path d="M9 22V12h6v10"/></svg>
+          <span id="jdb-title-text">住民税 課税所得の内訳（所得税とは別計算）</span>
+        </div>
+        <table class="jdb-table">
+          <tr><td id="jd-shotoku-lbl">給与所得</td><td id="jd-shotoku">—</td></tr>
+          <tr><td id="jd-shakai-lbl">　社会保険料控除</td><td id="jd-shakai">—</td></tr>
+          <tr><td id="jd-seimei-lbl">　生命保険料控除</td><td id="jd-seimei">—</td></tr>
+          <tr><td id="jd-haigusha-lbl">　配偶者控除（住民税）</td><td id="jd-haigusha">—</td></tr>
+          <tr><td id="jd-fuyou-lbl">　扶養控除（住民税）</td><td id="jd-fuyou">—</td></tr>
+          <tr><td id="jd-kiso-lbl">　基礎控除（住民税）</td><td id="jd-kiso">—</td></tr>
+          <tr class="jdb-total"><td id="jd-kazei-lbl">住民税 課税所得</td><td id="jd-kazei">—</td></tr>
+          <tr><td id="jd-shotokuwari-lbl">　所得割（× 10%）</td><td id="jd-shotokuwari">—</td></tr>
+          <tr><td id="jd-kintou-lbl">　均等割</td><td>5,000¥</td></tr>
+          <tr class="jdb-total"><td id="jd-total-lbl">住民税 合計</td><td id="jd-total">—</td></tr>
+        </table>
+      </div>
+
+      <details style="margin-top:12px">
+        <summary style="font-size:12px;font-weight:600;color:var(--text2);cursor:pointer;padding:8px 0;user-select:none" id="detail-summary">所得税 明細を見る ▸</summary>
         <table class="detail-table" style="margin-top:8px">
           <tr><td id="d-kyuyo-lbl">支払金額</td><td id="b-kyuyo">—</td></tr>
-          <tr><td id="d-kojo-lbl">給与所得控除</td><td id="b-kojo">—</td></tr>
+          <tr><td id="d-kojo-lbl">給与所得控除（参考）</td><td id="b-kojo">—</td></tr>
           <tr><td id="d-shotoku-lbl" style="font-weight:600;color:var(--text)">給与所得</td><td id="b-shotoku">—</td></tr>
-          <tr class="dt-group"><td colspan="2" id="d-kojosec-lbl">所得控除の内訳</td></tr>
+          <tr class="dt-group"><td colspan="2" id="d-kojosec-lbl">所得控除の内訳（所得税）</td></tr>
           <tr><td id="d-shakai-lbl">&nbsp;&nbsp;社会保険料控除</td><td id="b-shakai">—</td></tr>
           <tr><td id="d-seimei-lbl">&nbsp;&nbsp;生命保険料控除（合計）</td><td id="b-seimei">—</td></tr>
           <tr><td id="d-haigusha-lbl">&nbsp;&nbsp;配偶者（特別）控除</td><td id="b-haigusha">—</td></tr>
@@ -374,10 +406,6 @@
           <tr class="dt-income"><td id="d-base-lbl">&nbsp;&nbsp;所得税（税率適用後）</td><td id="b-income">—</td></tr>
           <tr class="dt-income"><td id="d-fukko-lbl">&nbsp;&nbsp;復興特別所得税（× 1.021）</td><td id="b-fukko-amt">—</td></tr>
           <tr class="dt-income" style="font-weight:600"><td id="d-income-total-lbl">&nbsp;&nbsp;所得税合計</td><td id="b-income-total">—</td></tr>
-          <tr class="dt-group"><td colspan="2"><span class="sdiv-jumin" id="d-jumin-sec">住民税（地方税）</span></td></tr>
-          <tr class="dt-jumin"><td id="d-jumin-s-lbl">&nbsp;&nbsp;所得割（課税所得 × 10%）</td><td id="b-jumin-s">—</td></tr>
-          <tr class="dt-jumin"><td id="d-kintou-lbl">&nbsp;&nbsp;均等割（一律）</td><td>5,000¥</td></tr>
-          <tr class="dt-jumin" style="font-weight:600"><td id="d-jumin-total-lbl">&nbsp;&nbsp;住民税合計</td><td id="b-jumin-total">—</td></tr>
           <tr class="dt-total"><td id="d-total-lbl">合計納税額（所得税 + 住民税）</td><td id="b-total">—</td></tr>
         </table>
       </details>
@@ -424,436 +452,393 @@
     国税庁規定に基づく計算式 · 令和7年（2025）
   </div>
 </div>
-
 <script>
-// ─── TRANSLATIONS ───────────────────────────────────────────────
-var T = {
-  ja: {
-    lang:'ja', htmlLang:'ja',
-    ttlMain:'税金・還付金計算ツール', ttlSub:'HSB JAPAN · 内部ツール · 令和7年（2025）',
-    langLabel:'🌐 言語:',
-    priorYear:'📅 令和6年以前 — 令和7年より前の年の税金を計算する（基礎控除: 一律48万円）',
-    ctIncome:'収入情報', lblKyuyo:'支払金額（年収） (¥)', lblShakai:'社会保険料 (¥)',
-    hintShakai:'源泉徴収票の「社会保険料等の金額」欄を参照',
-    ctSeimei:'生命保険料控除',
-    hintSeimei1:'最大控除: 40,000¥', hintSeimei2:'最大控除: 40,000¥', hintSeimei3:'最大控除: 40,000¥',
-    ctSpouse:'配偶者控除', lblSpouseQ:'配偶者の有無',
-    spNone:'なし', spNormal:'あり（納税者収入 < 900万¥）→ 380,000¥',
-    spOld:'配偶者70歳以上（老人控除対象）→ 480,000¥', spSpecial:'配偶者特別控除（配偶者収入 133〜155万¥）→ 260,000¥',
-    hintSpouse:'配偶者控除は納税者の所得が1,000万円以下の場合に適用。配偶者の収入は133万円以下（令和7年）。',
-    ctDep:'扶養控除（年齢別）', thAge:'年齢区分', thCount:'人数', thAmt:'控除額/人',
-    depU16:'16歳未満', dep1618:'16〜18歳', dep1922:'19〜22歳', dep1922b:'19〜22歳（特定親族）', dep23p:'23歳以上',
-    dep1618Amt:'380,000¥/人', dep1922Amt:'630,000¥/人', dep1922bAmt:'630,000¥/人', dep23pAmt:'380,000¥/人',
-    ctKakutei:'確定申告（還付）', lblGensen:'源泉徴収税額 (¥)',
-    hintGensen:'源泉徴収票の「源泉徴収税額」欄。所得税のみ（住民税を含まない）。',
-    lblFee:'HSB JAPAN 手数料 (¥)', hintFee:'お客様の実質受取額を計算するため',
-    btnCalc:'計算する', resTitle:'計算結果', btnCopy:'コピー',
-    msShotoku:'給与所得', msKazei:'課税所得', msFukko:'国税（所得税）', msJumin:'地方税（住民税）',
-    incBlockSub:'国税', jumBlockSub:'地方税',
-    detailSummary:'明細を見る ▸',
-    dKyuyo:'支払金額', dKojo:'給与所得控除', dShotoku:'給与所得', dKojosec:'所得控除の内訳',
-    dShakai:'　社会保険料控除', dSeimei:'　生命保険料控除（合計）',
-    dHaigusha:'　配偶者（特別）控除', dFuyou:'　扶養控除', dKazei:'課税所得金額',
-    dIncomeSec:'所得税（国税）', dBase:'　所得税（税率適用後）', dFukko:'　復興特別所得税（× 1.021）',
-    dIncomeTotal:'　所得税合計', dJuminSec:'住民税（地方税）',
-    dJuminS:'　所得割（課税所得 × 10%）', dKintou:'　均等割（一律）', dJuminTotal:'　住民税合計',
-    dTotal:'合計納税額（所得税 + 住民税）',
-    kTitle:'確定申告 還付金の見込み額', kNote:'※ 所得税のみ対象（住民税は含まない）',
-    noRefund:'還付なし — 実際の所得税額が源泉徴収税額以上のため、確定申告による還付は発生しません。',
-    noGensen:'源泉徴収税額が未入力です。入力すると確定申告の還付見込み額が計算されます。',
-    juminNote:'住民税は都道府県・市区町村が徴収する地方税であり、確定申告では還付されません。確定申告で還付されるのは所得税（国税）のみです。住民税は翌年6月から納付が始まります。',
-    btnPrint:'印刷・PDF保存', footer:'HSB JAPAN · 内部ツール · 参考用のみ\n国税庁規定に基づく計算式 · 令和7年（2025）',
-    kisoReiwa7:'基礎控除 適用額:', kisoNote7:'（給与所得が880,000円のしきい値を超えているため）',
-    kisoPrior:'令和6年以前モード: 基礎控除は一律 480,000¥ を適用中。',
-    incSub:(bt,rate)=>`所得税: ${bt}<br>× 1.021 復興特別所得税<br>税率: ${rate}%`,
-    jumSub:(s,yr)=>`所得割: ${s}（10% 固定）<br>均等割: 5,000¥<br>納付開始: ${yr}年6月`,
-    refundSub:(g,f,r)=>`${g}（源泉徴収）− ${f}（実際の所得税）= ${r}`,
-    feeOk:(fee,net)=>`手数料 ${fee} 控除後、お客様の実質受取額: <strong>${net}</strong>`,
-    feeOver:(fee,ref)=>`⚠ 手数料超過: 手数料（${fee}）が還付金（${ref}）を超えています。要調整。`,
-    alertKyuyo:'支払金額を入力してください。',
-    copyHeader:'=== 税金計算結果（令和7年）— HSB JAPAN ==='
-  },
-  vi: {
-    lang:'vi', htmlLang:'vi',
-    ttlMain:'Công cụ tính thuế & hoàn thuế', ttlSub:'HSB JAPAN · Nội bộ tư vấn viên · Reiwa 7 (2025)',
-    langLabel:'🌐 Ngôn ngữ:',
-    priorYear:'📅 令和6年以前 — Tính thuế cho các năm <strong>trước Reiwa 7</strong> (基礎控除 cố định 480,000¥)',
-    ctIncome:'Thông tin thu nhập', lblKyuyo:'支払金額 — Tổng thu nhập năm (¥)', lblShakai:'社会保険料 — Bảo hiểm xã hội đã nộp (¥)',
-    hintShakai:'Xem ô 社会保険料等の金額 trên 源泉徴収票',
-    ctSeimei:'生命保険料控除 — Khấu trừ bảo hiểm nhân thọ',
-    hintSeimei1:'Max hiệu lực: 40,000¥', hintSeimei2:'Max hiệu lực: 40,000¥', hintSeimei3:'Max hiệu lực: 40,000¥',
-    ctSpouse:'配偶者控除 — Khấu trừ vợ/chồng', lblSpouseQ:'配偶者あり？ — Có vợ/chồng phụ thuộc?',
-    spNone:'Không có', spNormal:'Có (thu nhập KH < 9,000,000¥) → 380,000¥',
-    spOld:'Vợ/chồng ≥70 tuổi (老人控除対象配偶者) → 480,000¥', spSpecial:'配偶者特別控除 (vợ/chồng thu nhập 1.33～1.55M¥) → 260,000¥',
-    hintSpouse:'配偶者控除 chỉ áp dụng khi thu nhập KH ≤ 10,000,000¥. Thu nhập vợ/chồng phải ≤ 1,330,000¥ (Reiwa 7).',
-    ctDep:'扶養控除 — Người phụ thuộc theo độ tuổi', thAge:'Nhóm tuổi', thCount:'Số người', thAmt:'Khấu trừ/người',
-    depU16:'Dưới 16 tuổi', dep1618:'16 – 18 tuổi', dep1922:'19 – 22 tuổi', dep1922b:'19 – 22 tuổi (特定親族)', dep23p:'23 tuổi trở lên',
-    dep1618Amt:'380,000¥/người', dep1922Amt:'630,000¥/người', dep1922bAmt:'630,000¥/người', dep23pAmt:'380,000¥/người',
-    ctKakutei:'確定申告 — Hoàn thuế Kakutei Shinkoku', lblGensen:'源泉徴収税額 — Thuế 所得税 đã khấu trừ (¥)',
-    hintGensen:'Lấy từ ô 源泉徴収税額 trên 源泉徴収票 · Chỉ là 所得税, không gồm 住民税',
-    lblFee:'Phí dịch vụ HSB JAPAN (¥)', hintFee:'Để tính số tiền KH thực nhận sau phí',
-    btnCalc:'Tính thuế & ước tính hoàn thuế', resTitle:'計算結果 / Kết quả tính toán', btnCopy:'コピー / Sao chép',
-    msShotoku:'Thu nhập từ lương', msKazei:'Thu nhập chịu thuế', msFukko:'Thuế thu nhập QG', msJumin:'Thuế cư trú ĐP',
-    incBlockSub:'Thuế thu nhập quốc gia (国税)', jumBlockSub:'Thuế cư trú địa phương (地方税)',
-    detailSummary:'明細を見る / Xem bảng tính chi tiết ▸',
-    dKyuyo:'支払金額 / Tổng thu nhập', dKojo:'給与所得控除 / Khấu trừ lương', dShotoku:'給与所得 / Thu nhập từ lương',
-    dKojosec:'所得控除の内訳 / Chi tiết các khoản giảm trừ',
-    dShakai:'　社会保険料控除 / BH xã hội', dSeimei:'　生命保険料控除 / BH nhân thọ (tổng)',
-    dHaigusha:'　配偶者控除 / Khấu trừ vợ/chồng', dFuyou:'　扶養控除 / Khấu trừ người phụ thuộc', dKazei:'課税所得金額 / Thu nhập chịu thuế',
-    dIncomeSec:'所得税（国税） / Thuế thu nhập quốc gia', dBase:'　所得税（thuế suất áp dụng）', dFukko:'　復興特別所得税 (× 1.021) / Phụ phí phục hưng',
-    dIncomeTotal:'　所得税合計 / Tổng thuế thu nhập', dJuminSec:'住民税（地方税） / Thuế cư trú địa phương',
-    dJuminS:'　所得割（× 10%） / Thuế theo thu nhập', dKintou:'　均等割 / Phí cố định', dJuminTotal:'　住民税合計 / Tổng thuế cư trú',
-    dTotal:'合計納税額 / Tổng thuế phải nộp (所得税 + 住民税)',
-    kTitle:'確定申告 還付金の見込み額 / Ước tính hoàn thuế Kakutei Shinkoku', kNote:'※ 所得税のみ対象 · Chỉ tính 所得税, không gồm 住民税',
-    noRefund:'還付なし / Không có hoàn thuế — Thuế 所得税 thực tế cao hơn hoặc bằng số đã khấu trừ. Kakutei Shinkoku không phát sinh hoàn tiền.',
-    noGensen:'Chưa nhập 源泉徴収税額 — điền vào để tính hoàn thuế Kakutei Shinkoku.',
-    juminNote:'Lưu ý: 住民税 là thuế địa phương, KHÔNG hoàn qua Kakutei Shinkoku. Chỉ 所得税 (国税) mới được hoàn. 住民税 bắt đầu nộp từ tháng 6 năm sau.',
-    btnPrint:'印刷・PDF / In / Lưu PDF', footer:'HSB JAPAN · Nội bộ · Chỉ dùng tham khảo\nCông thức theo 国税庁 · Reiwa 7 (2025)',
-    kisoReiwa7:'Lưu ý: 基礎控除 áp dụng là', kisoNote7:'(do 給与所得 vượt ngưỡng 880,000¥)',
-    kisoPrior:'Chế độ năm trước Reiwa 7: 基礎控除 cố định 480,000¥ đang được áp dụng.',
-    incSub:(bt,rate)=>`所得税 (Thuế TN): ${bt}<br>× 1.021 復興特別所得税 (Phụ phí phục hưng)<br>税率 / Thuế suất: ${rate}%`,
-    jumSub:(s,yr)=>`所得割 (Thuế ĐP): ${s}<br>均等割 (Phí cố định): 5,000¥<br>Nộp từ tháng 6/${yr}`,
-    refundSub:(g,f,r)=>`${g} (đã khấu trừ) − ${f} (所得税 thực) = ${r}`,
-    feeOk:(fee,net)=>`Sau phí HSB JAPAN ${fee}: KH thực nhận <strong>${net}</strong>`,
-    feeOver:(fee,ref)=>`⚠ CẢNH BÁO: Phí dịch vụ (${fee}) vượt số tiền hoàn thuế (${ref}). Cần điều chỉnh.`,
-    alertKyuyo:'Vui lòng nhập 支払金額',
-    copyHeader:'=== TÍNH THUẾ (Reiwa 7) — HSB JAPAN ==='
-  },
-  en: {
-    lang:'en', htmlLang:'en',
-    ttlMain:'Tax & Refund Calculator', ttlSub:'HSB JAPAN · Internal Tool · Reiwa 7 (2025)',
-    langLabel:'🌐 Language:',
-    priorYear:'📅 令和6年以前 — Calculate tax for years <strong>before Reiwa 7</strong> (基礎控除 fixed at ¥480,000)',
-    ctIncome:'Income Information', lblKyuyo:'支払金額 — Total Annual Income (¥)', lblShakai:'社会保険料 — Social Insurance Paid (¥)',
-    hintShakai:'See 社会保険料等の金額 field on your 源泉徴収票',
-    ctSeimei:'生命保険料控除 — Life Insurance Deduction',
-    hintSeimei1:'Max deduction: ¥40,000', hintSeimei2:'Max deduction: ¥40,000', hintSeimei3:'Max deduction: ¥40,000',
-    ctSpouse:'配偶者控除 — Spouse Deduction', lblSpouseQ:'Do you have a dependent spouse?',
-    spNone:'None', spNormal:'Yes (taxpayer income < ¥9M) → ¥380,000',
-    spOld:'Spouse aged ≥70 (老人控除対象配偶者) → ¥480,000', spSpecial:'配偶者特別控除 (spouse income ¥1.33M–1.55M) → ¥260,000',
-    hintSpouse:'Spouse deduction applies when taxpayer income ≤ ¥10M. Spouse income must be ≤ ¥1,330,000 (Reiwa 7).',
-    ctDep:'扶養控除 — Dependents by Age', thAge:'Age Group', thCount:'Count', thAmt:'Deduction/person',
-    depU16:'Under 16', dep1618:'Age 16–18', dep1922:'Age 19–22', dep1922b:'Age 19–22 (特定親族)', dep23p:'Age 23 and above',
-    dep1618Amt:'¥380,000/person', dep1922Amt:'¥630,000/person', dep1922bAmt:'¥630,000/person', dep23pAmt:'¥380,000/person',
-    ctKakutei:'確定申告 — Tax Refund (Kakutei Shinkoku)', lblGensen:'源泉徴収税額 — Income Tax Withheld at Source (¥)',
-    hintGensen:'From the 源泉徴収税額 field on your 源泉徴収票 · Income tax only, excludes 住民税',
-    lblFee:'HSB JAPAN Service Fee (¥)', hintFee:'To calculate the net amount the client receives',
-    btnCalc:'Calculate Tax & Estimate Refund', resTitle:'Calculation Results', btnCopy:'Copy',
-    msShotoku:'Employment Income', msKazei:'Taxable Income', msFukko:'National Income Tax', msJumin:'Local Resident Tax',
-    incBlockSub:'National Tax (国税)', jumBlockSub:'Local Tax (地方税)',
-    detailSummary:'View detailed breakdown ▸',
-    dKyuyo:'支払金額 / Total Income', dKojo:'給与所得控除 / Employment Income Deduction', dShotoku:'給与所得 / Employment Income',
-    dKojosec:'所得控除 / Income Deductions Detail',
-    dShakai:'　社会保険料控除 / Social Insurance', dSeimei:'　生命保険料控除 / Life Insurance (total)',
-    dHaigusha:'　配偶者控除 / Spouse Deduction', dFuyou:'　扶養控除 / Dependent Deduction', dKazei:'課税所得金額 / Taxable Income',
-    dIncomeSec:'所得税 / National Income Tax', dBase:'　Income Tax (after tax rate)', dFukko:'　復興特別所得税 (× 1.021) / Reconstruction Tax',
-    dIncomeTotal:'　Total Income Tax', dJuminSec:'住民税 / Local Resident Tax',
-    dJuminS:'　所得割 (× 10%) / Income-based Portion', dKintou:'　均等割 / Flat-rate Portion', dJuminTotal:'　Total Resident Tax',
-    dTotal:'Total Tax (Income Tax + Resident Tax)',
-    kTitle:'Estimated Tax Refund — Kakutei Shinkoku', kNote:'※ Income tax (所得税) only — excludes resident tax (住民税)',
-    noRefund:'No Refund — Actual income tax is equal to or higher than tax withheld. No refund will be issued via Kakutei Shinkoku.',
-    noGensen:'源泉徴収税額 not entered — fill in to calculate estimated Kakutei Shinkoku refund.',
-    juminNote:'Note: 住民税 (Resident Tax) is a local tax collected by the prefecture/municipality and is NOT refunded via Kakutei Shinkoku. Only 所得税 (income tax) is refunded. Resident tax payment begins in June of the following year.',
-    btnPrint:'Print / Save PDF', footer:'HSB JAPAN · Internal Tool · For Reference Only\nFormula per 国税庁 (NTA) · Reiwa 7 (2025)',
-    kisoReiwa7:'Note: 基礎控除 applied is', kisoNote7:'(because 給与所得 exceeds the ¥880,000 threshold)',
-    kisoPrior:'Pre-Reiwa 7 mode: 基礎控除 is fixed at ¥480,000.',
-    incSub:(bt,rate)=>`Income Tax: ${bt}<br>× 1.021 Reconstruction Tax<br>Tax Rate: ${rate}%`,
-    jumSub:(s,yr)=>`Income-based (10%): ${s}<br>Flat-rate: ¥5,000<br>Payment starts: June ${yr}`,
-    refundSub:(g,f,r)=>`${g} (withheld) − ${f} (actual tax) = ${r}`,
-    feeOk:(fee,net)=>`After HSB JAPAN fee ${fee}: Client receives <strong>${net}</strong>`,
-    feeOver:(fee,ref)=>`⚠ WARNING: Service fee (${fee}) exceeds refund amount (${ref}). Adjustment needed.`,
-    alertKyuyo:'Please enter 支払金額 (total annual income).',
-    copyHeader:'=== TAX CALCULATION (Reiwa 7) — HSB JAPAN ==='
-  }
-};
+// ── TRANSLATIONS ─────────────────────────────────────────────────
+var T={
+ja:{
+  ttlMain:'税金・還付金計算ツール',ttlSub:'HSB JAPAN · 内部ツール · 令和7年（2025）',langLabel:'🌐 言語:',
+  priorYear:'📅 令和6年以前 — 令和7年より前の年（所得税 基礎控除:48万 / 住民税 基礎控除:33万）',
+  ctIncome:'収入情報',lblKyuyo:'支払金額（年収） (¥)',lblShakai:'社会保険料 (¥)',hintShakai:'源泉徴収票の「社会保険料等の金額」欄を参照',
+  ctSeimei:'生命保険料控除',hintSeimei1:'最大控除: 40,000¥',hintSeimei2:'最大控除: 40,000¥',hintSeimei3:'最大控除: 40,000¥',
+  ctSpouse:'配偶者控除',lblSpouseQ:'配偶者の有無',
+  hintSpouse:'配偶者控除は納税者の所得1,000万円以下の場合に適用。配偶者収入133万円以下（令和7年）。住民税の控除額は所得税と異なります。',
+  ctDep:'扶養控除（年齢別）',thAge:'年齢区分',thCount:'人数',
+  depGa:'16〜18歳 · 23〜69歳',depGaSub:'一般扶養親族',depGaShotoku:'38万¥/人',depGaJumin:'33万¥/人',
+  depSp:'19〜22歳',depSpSub:'特定扶養親族',depSpShotoku:'63万¥/人',depSpJumin:'45万¥/人',
+  dep70:'70歳以上',dep70Sub:'老人扶養親族（同居していない）',dep70Shotoku:'48万¥/人',dep70Jumin:'38万¥/人',
+  depNote:'住民税の扶養控除額は所得税と異なります。ツールは各グループの人数から所得税・住民税それぞれの控除額を自動計算します。',
+  ctKakutei:'確定申告（還付）',lblGensen:'源泉徴収税額 (¥)',hintGensen:'源泉徴収票の「源泉徴収税額」欄。所得税のみ（住民税を含まない）。',
+  lblFee:'HSB JAPAN 手数料 (¥)',hintFee:'お客様の実質受取額を計算するため',
+  btnCalc:'計算する',resTitle:'計算結果',btnCopy:'コピー',
+  msShotoku:'給与所得',msKazei:'課税所得（所得税）',msFukko:'国税（所得税）',msJumin:'地方税（住民税）',
+  incBlockSub:'国税',jumBlockSub:'地方税',
+  jdbTitle:'住民税 課税所得の内訳（所得税とは別計算）',
+  jdbShotoku:'給与所得',jdbShakai:'　社会保険料控除',jdbSeimei:'　生命保険料控除',
+  jdbHaigusha:'　配偶者控除（住民税）',jdbFuyou:'　扶養控除（住民税）',
+  jdbKiso:'　基礎控除（住民税）',jdbKazei:'住民税 課税所得',
+  jdbShotokuwari:'　所得割（× 10%）',jdbKintou:'　均等割',jdbTotal:'住民税 合計',
+  detailSummary:'所得税 明細を見る ▸',
+  dKyuyo:'支払金額',dKojo:'給与所得控除（参考）',dShotoku:'給与所得',dKojosec:'所得控除の内訳（所得税）',
+  dShakai:'　社会保険料控除',dSeimei:'　生命保険料控除（合計）',dHaigusha:'　配偶者（特別）控除',dFuyou:'　扶養控除',dKazei:'課税所得金額',
+  dIncomeSec:'所得税（国税）',dBase:'　所得税（税率適用後）',dFukko:'　復興特別所得税（× 1.021）',dIncomeTotal:'　所得税合計',
+  dTotal:'合計納税額（所得税 + 住民税）',
+  kTitle:'確定申告 還付金の見込み額',kNote:'※ 所得税のみ対象（住民税は含まない）',
+  noRefund:'還付なし — 実際の所得税額が源泉徴収税額以上のため、確定申告による還付は発生しません。',
+  noGensen:'源泉徴収税額が未入力です。入力すると確定申告の還付見込み額が計算されます。',
+  juminNote:'住民税は都道府県・市区町村が徴収する地方税であり、確定申告では還付されません。確定申告で還付されるのは所得税（国税）のみです。住民税は翌年6月から納付が始まります。',
+  btnPrint:'印刷・PDF保存',footer:'HSB JAPAN · 内部ツール · 参考用のみ\n国税庁規定に基づく計算式 · 令和7年（2025）',
+  kisoReiwa7:'所得税 基礎控除 適用額:',kisoNote7:'',kisoPrior:'令和6年以前モード: 所得税 基礎控除 480,000¥ / 住民税 基礎控除 330,000¥ を適用中。',
+  incSub:(bt,rate)=>`所得税: ${bt}<br>× 1.021 復興特別所得税<br>税率: ${rate}%`,
+  jumSub:(s,yr)=>`所得割: ${s}（10% 固定）<br>均等割: 5,000¥<br>納付開始: ${yr}年6月`,
+  refundSub:(g,f,r)=>`${g}（源泉徴収）− ${f}（実際の所得税）= ${r}`,
+  feeOk:(fee,net)=>`手数料 ${fee} 控除後、実質受取額: <strong>${net}</strong>`,
+  feeOver:(fee,ref)=>`⚠ 手数料超過: 手数料（${fee}）が還付金（${ref}）を超えています。要調整。`,
+  alertKyuyo:'支払金額を入力してください。',copyHeader:'=== 税金計算結果（令和7年）— HSB JAPAN ==='
+},
+vi:{
+  ttlMain:'Công cụ tính thuế & hoàn thuế',ttlSub:'HSB JAPAN · Nội bộ tư vấn viên · Reiwa 7 (2025)',langLabel:'🌐 Ngôn ngữ:',
+  priorYear:'📅 令和6年以前 — Tính thuế năm trước Reiwa 7 (所得税 基礎控除: 48万 / 住民税 基礎控除: 33万)',
+  ctIncome:'Thông tin thu nhập',lblKyuyo:'支払金額 — Tổng thu nhập năm (¥)',lblShakai:'社会保険料 — Bảo hiểm xã hội (¥)',hintShakai:'Xem ô 社会保険料等の金額 trên 源泉徴収票',
+  ctSeimei:'生命保険料控除 — Khấu trừ bảo hiểm nhân thọ',hintSeimei1:'Max: 40,000¥',hintSeimei2:'Max: 40,000¥',hintSeimei3:'Max: 40,000¥',
+  ctSpouse:'配偶者控除 — Khấu trừ vợ/chồng',lblSpouseQ:'配偶者あり？ — Có vợ/chồng phụ thuộc?',
+  hintSpouse:'配偶者控除 áp dụng khi KH thu nhập ≤ 10M¥. Thu nhập vợ/chồng ≤ 1,330,000¥ (Reiwa 7). Mức khấu trừ 住民税 thấp hơn 所得税.',
+  ctDep:'扶養控除 — Người phụ thuộc theo độ tuổi',thAge:'Nhóm tuổi',thCount:'Số người',
+  depGa:'16–18 tuổi & 23–69 tuổi',depGaSub:'一般扶養親族',depGaShotoku:'38万¥/người',depGaJumin:'33万¥/người',
+  depSp:'19–22 tuổi',depSpSub:'特定扶養親族',depSpShotoku:'63万¥/người',depSpJumin:'45万¥/người',
+  dep70:'70 tuổi trở lên',dep70Sub:'老人扶養親族 (không đồng cư)',dep70Shotoku:'48万¥/người',dep70Jumin:'38万¥/người',
+  depNote:'Mức khấu trừ 住民税 khác 所得税. Tool tự tính đúng cho từng loại thuế dựa trên số người mỗi nhóm.',
+  ctKakutei:'確定申告 — Hoàn thuế Kakutei Shinkoku',lblGensen:'源泉徴収税額 — Thuế 所得税 đã khấu trừ (¥)',hintGensen:'Lấy từ 源泉徴収税額 trên 源泉徴収票 · Chỉ 所得税, không gồm 住民税',
+  lblFee:'Phí dịch vụ HSB JAPAN (¥)',hintFee:'Để tính số tiền KH thực nhận sau phí',
+  btnCalc:'Tính thuế & ước tính hoàn thuế',resTitle:'計算結果 / Kết quả tính toán',btnCopy:'コピー / Sao chép',
+  msShotoku:'Thu nhập từ lương',msKazei:'Thu nhập chịu thuế (所得税)',msFukko:'Thuế thu nhập QG',msJumin:'Thuế cư trú ĐP',
+  incBlockSub:'Thuế thu nhập quốc gia (国税)',jumBlockSub:'Thuế cư trú địa phương (地方税)',
+  jdbTitle:'Chi tiết tính 住民税 課税所得 (riêng biệt với 所得税)',
+  jdbShotoku:'給与所得 / Thu nhập từ lương',jdbShakai:'　社会保険料控除 / BH xã hội',jdbSeimei:'　生命保険料控除 / BH nhân thọ',
+  jdbHaigusha:'　配偶者控除 住民税 / Khấu trừ vợ/chồng',jdbFuyou:'　扶養控除 住民税 / Khấu trừ người phụ thuộc',
+  jdbKiso:'　基礎控除 住民税 / Khấu trừ cơ bản',jdbKazei:'住民税 課税所得 / Thu nhập chịu thuế cư trú',
+  jdbShotokuwari:'　所得割（× 10%） / Thuế theo thu nhập',jdbKintou:'　均等割 / Phí cố định',jdbTotal:'住民税 合計 / Tổng thuế cư trú',
+  detailSummary:'明細を見る / Xem chi tiết 所得税 ▸',
+  dKyuyo:'支払金額 / Tổng thu nhập',dKojo:'給与所得控除 / Khấu trừ lương (tham khảo)',dShotoku:'給与所得 / Thu nhập từ lương',dKojosec:'所得控除 / Các khoản giảm trừ (所得税)',
+  dShakai:'　BH xã hội',dSeimei:'　BH nhân thọ (tổng)',dHaigusha:'　Khấu trừ vợ/chồng',dFuyou:'　扶養控除 所得税',dKazei:'課税所得金額 / Thu nhập chịu thuế',
+  dIncomeSec:'所得税 / Thuế thu nhập QG',dBase:'　Thuế thu nhập (thuế suất áp dụng)',dFukko:'　復興特別所得税 (× 1.021)',dIncomeTotal:'　Tổng 所得税',
+  dTotal:'合計 / Tổng thuế (所得税 + 住民税)',
+  kTitle:'確定申告 還付金の見込み額 / Ước tính hoàn thuế Kakutei',kNote:'※ Chỉ 所得税 — không gồm 住民税',
+  noRefund:'還付なし / Không hoàn thuế — 所得税 thực tế ≥ số đã khấu trừ.',
+  noGensen:'Chưa nhập 源泉徴収税額 — điền vào để tính hoàn thuế Kakutei Shinkoku.',
+  juminNote:'住民税 là thuế địa phương, KHÔNG hoàn qua Kakutei Shinkoku. Chỉ 所得税 được hoàn. 住民税 nộp từ tháng 6 năm sau.',
+  btnPrint:'In / Lưu PDF',footer:'HSB JAPAN · Nội bộ · Tham khảo\nCông thức theo 国税庁 · Reiwa 7 (2025)',
+  kisoReiwa7:'Lưu ý: 所得税 基礎控除 áp dụng là',kisoNote7:'',kisoPrior:'Chế độ ~Reiwa 6: 所得税 基礎控除 480,000¥ / 住民税 基礎控除 330,000¥.',
+  incSub:(bt,rate)=>`所得税: ${bt}<br>× 1.021 復興税<br>Thuế suất: ${rate}%`,
+  jumSub:(s,yr)=>`所得割: ${s}<br>均等割: 5,000¥<br>Nộp từ tháng 6/${yr}`,
+  refundSub:(g,f,r)=>`${g} (đã khấu trừ) − ${f} (所得税 thực) = ${r}`,
+  feeOk:(fee,net)=>`Sau phí ${fee}: KH thực nhận <strong>${net}</strong>`,
+  feeOver:(fee,ref)=>`⚠ Phí (${fee}) vượt hoàn thuế (${ref}). Cần điều chỉnh.`,
+  alertKyuyo:'Vui lòng nhập 支払金額',copyHeader:'=== TÍNH THUẾ (Reiwa 7) — HSB JAPAN ==='
+},
+en:{
+  ttlMain:'Tax & Refund Calculator',ttlSub:'HSB JAPAN · Internal Tool · Reiwa 7 (2025)',langLabel:'🌐 Language:',
+  priorYear:'📅 Before Reiwa 7 — Income tax 基礎控除: ¥480,000 / Resident tax 基礎控除: ¥330,000',
+  ctIncome:'Income Information',lblKyuyo:'支払金額 — Total Annual Income (¥)',lblShakai:'社会保険料 — Social Insurance Paid (¥)',hintShakai:'See 社会保険料等の金額 on your 源泉徴収票',
+  ctSeimei:'生命保険料控除 — Life Insurance Deduction',hintSeimei1:'Max: ¥40,000',hintSeimei2:'Max: ¥40,000',hintSeimei3:'Max: ¥40,000',
+  ctSpouse:'配偶者控除 — Spouse Deduction',lblSpouseQ:'Do you have a dependent spouse?',
+  hintSpouse:'Spouse deduction applies when taxpayer income ≤ ¥10M. Spouse income must be ≤ ¥1,330,000 (Reiwa 7). Resident tax deduction amounts differ from income tax.',
+  ctDep:'扶養控除 — Dependents by Age Group',thAge:'Age Group',thCount:'Count',
+  depGa:'Age 16–18 & 23–69',depGaSub:'一般扶養親族 — General Dependent',depGaShotoku:'¥380,000/person',depGaJumin:'¥330,000/person',
+  depSp:'Age 19–22',depSpSub:'特定扶養親族 — Specific Dependent',depSpShotoku:'¥630,000/person',depSpJumin:'¥450,000/person',
+  dep70:'Age 70+',dep70Sub:'老人扶養親族 — Elderly Dependent (non-resident)',dep70Shotoku:'¥480,000/person',dep70Jumin:'¥380,000/person',
+  depNote:'Resident tax deduction amounts differ from income tax. The tool automatically applies the correct rate for each tax type based on the number entered per group.',
+  ctKakutei:'確定申告 — Tax Refund (Kakutei Shinkoku)',lblGensen:'源泉徴収税額 — Income Tax Withheld (¥)',hintGensen:'From 源泉徴収税額 field on 源泉徴収票 · Income tax only, excludes resident tax',
+  lblFee:'HSB JAPAN Service Fee (¥)',hintFee:'To calculate net amount client receives',
+  btnCalc:'Calculate Tax & Estimate Refund',resTitle:'Calculation Results',btnCopy:'Copy',
+  msShotoku:'Employment Income',msKazei:'Taxable Income (income tax)',msFukko:'National Income Tax',msJumin:'Local Resident Tax',
+  incBlockSub:'National Tax (国税)',jumBlockSub:'Local Tax (地方税)',
+  jdbTitle:'Resident Tax (住民税) Taxable Income Breakdown — Separate Calculation',
+  jdbShotoku:'Employment Income',jdbShakai:'　Social Insurance',jdbSeimei:'　Life Insurance',
+  jdbHaigusha:'　Spouse Deduction (resident tax)',jdbFuyou:'　Dependent Deduction (resident tax)',
+  jdbKiso:'　Basic Deduction (resident tax)',jdbKazei:'Resident Tax Taxable Income',
+  jdbShotokuwari:'　Income-based (× 10%)',jdbKintou:'　Flat-rate Portion',jdbTotal:'Total Resident Tax',
+  detailSummary:'View Income Tax Detail ▸',
+  dKyuyo:'Total Income',dKojo:'Employment Income Deduction (ref)',dShotoku:'Employment Income',dKojosec:'Income Deductions (income tax)',
+  dShakai:'　Social Insurance',dSeimei:'　Life Insurance (total)',dHaigusha:'　Spouse Deduction',dFuyou:'　Dependent Deduction',dKazei:'Taxable Income',
+  dIncomeSec:'Income Tax (国税)',dBase:'　Income Tax (after rate)',dFukko:'　Reconstruction Tax (× 1.021)',dIncomeTotal:'　Total Income Tax',
+  dTotal:'Total Tax (Income Tax + Resident Tax)',
+  kTitle:'Estimated Tax Refund — Kakutei Shinkoku',kNote:'※ Income tax (所得税) only — excludes resident tax',
+  noRefund:'No Refund — Actual income tax ≥ tax withheld.',
+  noGensen:'源泉徴収税額 not entered — fill in to estimate Kakutei Shinkoku refund.',
+  juminNote:'住民税 (Resident Tax) is a local tax and is NOT refunded via Kakutei Shinkoku. Only income tax is refunded. Resident tax payment begins June of the following year.',
+  btnPrint:'Print / Save PDF',footer:'HSB JAPAN · Internal Tool · For Reference Only\nFormula per 国税庁 (NTA) · Reiwa 7 (2025)',
+  kisoReiwa7:'Note: Income tax 基礎控除 applied:',kisoNote7:'',kisoPrior:'Pre-Reiwa 7 mode: Income tax 基礎控除 ¥480,000 / Resident tax 基礎控除 ¥330,000.',
+  incSub:(bt,rate)=>`Income Tax: ${bt}<br>× 1.021 Reconstruction Tax<br>Rate: ${rate}%`,
+  jumSub:(s,yr)=>`Income-based (10%): ${s}<br>Flat-rate: ¥5,000<br>Payment starts: June ${yr}`,
+  refundSub:(g,f,r)=>`${g} (withheld) − ${f} (actual) = ${r}`,
+  feeOk:(fee,net)=>`After fee ${fee}: Client receives <strong>${net}</strong>`,
+  feeOver:(fee,ref)=>`⚠ Fee (${fee}) exceeds refund (${ref}). Adjustment needed.`,
+  alertKyuyo:'Please enter 支払金額 (total annual income).',copyHeader:'=== TAX CALCULATION (Reiwa 7) — HSB JAPAN ==='
+}};
 
-var lang = 'ja';
+var lang='ja';
 
 function setLang(l){
-  lang = l;
-  ['vi','en','ja'].forEach(x => document.getElementById('btn-'+x).classList.toggle('active', x===l));
-  var t = T[l];
-  document.documentElement.lang = t.htmlLang;
-  document.getElementById('ttl-main').textContent = t.ttlMain;
-  document.getElementById('ttl-sub').textContent = t.ttlSub;
-  document.getElementById('lang-label').textContent = t.langLabel;
-  document.getElementById('lbl-prioryear').innerHTML = t.priorYear;
-  document.getElementById('ct-income').textContent = t.ctIncome;
-  document.getElementById('lbl-kyuyo').textContent = t.lblKyuyo;
-  document.getElementById('lbl-shakai').textContent = t.lblShakai;
-  document.getElementById('hint-shakai').textContent = t.hintShakai;
-  document.getElementById('ct-seimei').textContent = t.ctSeimei;
-  document.getElementById('hint-seimei1').textContent = t.hintSeimei1;
-  document.getElementById('hint-seimei2').textContent = t.hintSeimei2;
-  document.getElementById('hint-seimei3').textContent = t.hintSeimei3;
-  document.getElementById('ct-spouse').textContent = t.ctSpouse;
-  document.getElementById('lbl-spouse-q').textContent = t.lblSpouseQ;
-  document.getElementById('sp-none').textContent = t.spNone;
-  document.getElementById('sp-normal').textContent = t.spNormal;
-  document.getElementById('sp-old').textContent = t.spOld;
-  document.getElementById('sp-special').textContent = t.spSpecial;
-  document.getElementById('hint-spouse').textContent = t.hintSpouse;
-  document.getElementById('ct-dep').textContent = t.ctDep;
-  document.getElementById('th-age').textContent = t.thAge;
-  document.getElementById('th-count').textContent = t.thCount;
-  document.getElementById('th-amount').textContent = t.thAmt;
-  document.getElementById('dep-u16-lbl').textContent = t.depU16;
-  document.getElementById('dep-1618-lbl').textContent = t.dep1618;
-  document.getElementById('dep-1922-lbl').textContent = t.dep1922;
-  document.getElementById('dep-1922b-lbl').textContent = t.dep1922b;
-  document.getElementById('dep-23p-lbl').textContent = t.dep23p;
-  document.getElementById('dep-1618-amt').textContent = t.dep1618Amt;
-  document.getElementById('dep-1922-amt').textContent = t.dep1922Amt;
-  document.getElementById('dep-1922b-amt').textContent = t.dep1922bAmt;
-  document.getElementById('dep-23p-amt').textContent = t.dep23pAmt;
-  document.getElementById('ct-kakutei').textContent = t.ctKakutei;
-  document.getElementById('lbl-gensen').textContent = t.lblGensen;
-  document.getElementById('hint-gensen').textContent = t.hintGensen;
-  document.getElementById('lbl-fee').textContent = t.lblFee;
-  document.getElementById('hint-fee').textContent = t.hintFee;
-  document.getElementById('btn-calc-lbl').textContent = t.btnCalc;
-  document.getElementById('res-title').textContent = t.resTitle;
-  document.getElementById('btn-copy-lbl').textContent = t.btnCopy;
-  document.getElementById('ms-shotoku').textContent = t.msShotoku;
-  document.getElementById('ms-kazei').textContent = t.msKazei;
-  document.getElementById('ms-fukko').textContent = t.msFukko;
-  document.getElementById('ms-jumin').textContent = t.msJumin;
-  document.getElementById('inc-block-sub').textContent = t.incBlockSub;
-  document.getElementById('jum-block-sub').textContent = t.jumBlockSub;
-  document.getElementById('detail-summary').textContent = t.detailSummary;
-  document.getElementById('d-kyuyo-lbl').textContent = t.dKyuyo;
-  document.getElementById('d-kojo-lbl').textContent = t.dKojo;
-  document.getElementById('d-shotoku-lbl').textContent = t.dShotoku;
-  document.getElementById('d-kojosec-lbl').textContent = t.dKojosec;
-  document.getElementById('d-shakai-lbl').textContent = t.dShakai;
-  document.getElementById('d-seimei-lbl').textContent = t.dSeimei;
-  document.getElementById('d-haigusha-lbl').textContent = t.dHaigusha;
-  document.getElementById('d-fuyou-lbl').textContent = t.dFuyou;
-  document.getElementById('d-kazei-lbl').textContent = t.dKazei;
-  document.getElementById('d-income-sec').textContent = t.dIncomeSec;
-  document.getElementById('d-base-lbl').textContent = t.dBase;
-  document.getElementById('d-fukko-lbl').textContent = t.dFukko;
-  document.getElementById('d-income-total-lbl').textContent = t.dIncomeTotal;
-  document.getElementById('d-jumin-sec').textContent = t.dJuminSec;
-  document.getElementById('d-jumin-s-lbl').textContent = t.dJuminS;
-  document.getElementById('d-kintou-lbl').textContent = t.dKintou;
-  document.getElementById('d-jumin-total-lbl').textContent = t.dJuminTotal;
-  document.getElementById('d-total-lbl').textContent = t.dTotal;
-  document.getElementById('k-title').textContent = t.kTitle;
-  document.getElementById('k-note').textContent = t.kNote;
-  document.getElementById('no-refund-text').textContent = t.noRefund;
-  document.getElementById('no-gensen-text').textContent = t.noGensen;
-  document.getElementById('jumin-note-text').textContent = t.juminNote;
-  document.getElementById('btn-print-lbl').textContent = t.btnPrint;
-  document.getElementById('footer-text').innerHTML = t.footer.replace('\n','<br>');
+  lang=l;
+  ['vi','en','ja'].forEach(x=>document.getElementById('btn-'+x).classList.toggle('active',x===l));
+  var t=T[l];
+  document.documentElement.lang=l;
+  var ids={
+    'ttl-main':t.ttlMain,'ttl-sub':t.ttlSub,'lang-label':t.langLabel,
+    'ct-income':t.ctIncome,'lbl-kyuyo':t.lblKyuyo,'lbl-shakai':t.lblShakai,'hint-shakai':t.hintShakai,
+    'ct-seimei':t.ctSeimei,'hint-seimei1':t.hintSeimei1,'hint-seimei2':t.hintSeimei2,'hint-seimei3':t.hintSeimei3,
+    'ct-spouse':t.ctSpouse,'lbl-spouse-q':t.lblSpouseQ,'hint-spouse':t.hintSpouse,
+    'ct-dep':t.ctDep,'th-age':t.thAge,'th-count':t.thCount,
+    'dep-ga-lbl':t.depGa,'dep-ga-sub':t.depGaSub,'dep-ga-shotoku':t.depGaShotoku,'dep-ga-jumin':t.depGaJumin,
+    'dep-sp-lbl':t.depSp,'dep-sp-sub':t.depSpSub,'dep-sp-shotoku':t.depSpShotoku,'dep-sp-jumin':t.depSpJumin,
+    'dep-70-lbl':t.dep70,'dep-70-sub':t.dep70Sub,'dep-70-shotoku':t.dep70Shotoku,'dep-70-jumin':t.dep70Jumin,
+    'dep-note':t.depNote,
+    'ct-kakutei':t.ctKakutei,'lbl-gensen':t.lblGensen,'hint-gensen':t.hintGensen,
+    'lbl-fee':t.lblFee,'hint-fee':t.hintFee,'btn-calc-lbl':t.btnCalc,'res-title':t.resTitle,'btn-copy-lbl':t.btnCopy,
+    'ms-shotoku':t.msShotoku,'ms-kazei':t.msKazei,'ms-fukko':t.msFukko,'ms-jumin':t.msJumin,
+    'inc-block-sub':t.incBlockSub,'jum-block-sub':t.jumBlockSub,'jdb-title-text':t.jdbTitle,
+    'jd-shotoku-lbl':t.jdbShotoku,'jd-shakai-lbl':t.jdbShakai,'jd-seimei-lbl':t.jdbSeimei,
+    'jd-haigusha-lbl':t.jdbHaigusha,'jd-fuyou-lbl':t.jdbFuyou,'jd-kiso-lbl':t.jdbKiso,
+    'jd-kazei-lbl':t.jdbKazei,'jd-shotokuwari-lbl':t.jdbShotokuwari,'jd-kintou-lbl':t.jdbKintou,'jd-total-lbl':t.jdbTotal,
+    'detail-summary':t.detailSummary,
+    'd-kyuyo-lbl':t.dKyuyo,'d-kojo-lbl':t.dKojo,'d-shotoku-lbl':t.dShotoku,'d-kojosec-lbl':t.dKojosec,
+    'd-shakai-lbl':t.dShakai,'d-seimei-lbl':t.dSeimei,'d-haigusha-lbl':t.dHaigusha,'d-fuyou-lbl':t.dFuyou,'d-kazei-lbl':t.dKazei,
+    'd-income-sec':t.dIncomeSec,'d-base-lbl':t.dBase,'d-fukko-lbl':t.dFukko,'d-income-total-lbl':t.dIncomeTotal,'d-total-lbl':t.dTotal,
+    'k-title':t.kTitle,'k-note':t.kNote,'no-refund-text':t.noRefund,'no-gensen-text':t.noGensen,'jumin-note-text':t.juminNote,
+    'btn-print-lbl':t.btnPrint
+  };
+  Object.keys(ids).forEach(id=>{var el=document.getElementById(id);if(el)el.textContent=ids[id];});
+  document.getElementById('lbl-prioryear').innerHTML=t.priorYear;
+  document.getElementById('footer-text').innerHTML=t.footer.replace('\n','<br>');
+  // spouse options
+  document.getElementById('sp-none').textContent=l==='ja'?'なし':l==='vi'?'Không có':'None';
+  document.getElementById('sp-normal').textContent=l==='ja'?'あり（収入<900万¥）所得税38万/住民税33万':l==='vi'?'Có (KH <9M¥) 所得税38万/住民税33万':'Yes (<¥9M) Income tax ¥380k / Resident ¥330k';
+  document.getElementById('sp-old').textContent=l==='ja'?'配偶者70歳以上 所得税48万/住民税38万':l==='vi'?'Vợ/chồng ≥70t 所得税48万/住民税38万':'Spouse ≥70 Income tax ¥480k / Resident ¥380k';
+  document.getElementById('sp-special').textContent=l==='ja'?'配偶者特別控除 所得税26万/住民税21万':l==='vi'?'配偶者特別控除 所得税26万/住民税21万':'Special spouse deduction Income ¥260k / Resident ¥210k';
 }
 
-// ─── YEAR MODE ──────────────────────────────────────────────────
 function updateYearMode(){
-  var prior = document.getElementById('priorYear').checked;
-  document.getElementById('priorYearNote').classList.toggle('hidden', !prior);
+  document.getElementById('priorYearNote').classList.toggle('hidden',!document.getElementById('priorYear').checked);
 }
 
-// ─── TAX FORMULAS ───────────────────────────────────────────────
-function fmt(n){ return Math.round(n).toLocaleString('ja-JP')+'¥'; }
+// ── FORMULAS ─────────────────────────────────────────────────────
+function fmt(n){return Math.round(n).toLocaleString('ja-JP')+'¥';}
 
-// 給与所得 (Reiwa 7) — trả về 給与所得 trực tiếp (không phải 控除額)
-// Bảng: https://www.nta.go.jp/taxes/shiraberu/taxanswer/shotoku/1410.htm
 function calcKyuyoShotoku(A){
-  if(A <= 0) return 0;
-  if(A <= 650999) return 0;
-  if(A <= 1899999) return A - 650000;
-  if(A <= 3599999){
-    var B = Math.floor(A / 4 / 1000) * 1000; // 千円未満切捨て
-    return B * 2.8 - 80000;
-  }
-  if(A <= 6599999){
-    var B = Math.floor(A / 4 / 1000) * 1000;
-    return B * 3.2 - 440000;
-  }
-  if(A <= 8499999) return A * 0.9 - 1100000;
-  return A - 1950000; // 8,500,000円以上（所得金額調整控除なし）
+  if(A<=0)return 0;
+  if(A<=650999)return 0;
+  if(A<=1899999)return A-650000;
+  if(A<=3599999){var B=Math.floor(A/4/1000)*1000;return B*2.8-80000;}
+  if(A<=6599999){var B=Math.floor(A/4/1000)*1000;return B*3.2-440000;}
+  if(A<=8499999)return A*0.9-1100000;
+  return A-1950000;
 }
 
-function calcKisoKojo(shotoku, priorYear){
-  if(priorYear) return 480000;
-  if(shotoku<=1320000) return 950000;
-  if(shotoku<=3360000) return 880000;
-  if(shotoku<=4890000) return 680000;
-  if(shotoku<=6550000) return 630000;
-  if(shotoku<=23500000) return 580000;
-  if(shotoku<=24000000) return 480000;
-  if(shotoku<=24500000) return 320000;
-  if(shotoku<=25000000) return 160000;
+// 所得税 基礎控除 (Reiwa 7)
+function calcKisoShotoku(shotoku,prior){
+  if(prior)return 480000;
+  if(shotoku<=1320000)return 950000;
+  if(shotoku<=3360000)return 880000;
+  if(shotoku<=4890000)return 680000;
+  if(shotoku<=6550000)return 630000;
+  if(shotoku<=23500000)return 580000;
+  if(shotoku<=24000000)return 480000;
+  if(shotoku<=24500000)return 320000;
+  if(shotoku<=25000000)return 160000;
   return 0;
 }
 
-function calcSeimeiOne(paid){
-  if(paid<=0) return 0;
-  if(paid<=20000) return paid;
-  if(paid<=40000) return Math.round(paid*0.5+10000);
-  if(paid<=80000) return Math.round(paid*0.25+17500);
+// 住民税 基礎控除 (Reiwa 7: 43万 / ~Reiwa 6: 33万)
+function calcKisoJumin(shotoku,prior){
+  if(prior)return 330000;
+  if(shotoku<=23500000)return 430000;
+  if(shotoku<=24000000)return 290000;
+  if(shotoku<=24500000)return 150000;
+  return 0;
+}
+
+function calcSeimeiOne(p){
+  if(p<=0)return 0;
+  if(p<=20000)return p;
+  if(p<=40000)return Math.round(p*0.5+10000);
+  if(p<=80000)return Math.round(p*0.25+17500);
   return 40000;
 }
 
 function calcShotokuZei(kazei){
-  if(kazei<=0) return 0;
-  if(kazei<=1950000) return kazei*0.05;
-  if(kazei<=3300000) return kazei*0.1-97500;
-  if(kazei<=6950000) return kazei*0.2-427500;
-  if(kazei<=9000000) return kazei*0.23-636000;
-  if(kazei<=18000000) return kazei*0.33-1536000;
-  if(kazei<=40000000) return kazei*0.40-2796000;
+  if(kazei<=0)return 0;
+  if(kazei<=1950000)return kazei*0.05;
+  if(kazei<=3300000)return kazei*0.1-97500;
+  if(kazei<=6950000)return kazei*0.2-427500;
+  if(kazei<=9000000)return kazei*0.23-636000;
+  if(kazei<=18000000)return kazei*0.33-1536000;
+  if(kazei<=40000000)return kazei*0.40-2796000;
   return kazei*0.45-4796000;
 }
 
-var lastResult = {};
+var lastResult={};
 
-// ─── CALCULATE ──────────────────────────────────────────────────
 function calculate(){
-  var t = T[lang];
-  var kyuyo = parseFloat(document.getElementById('kyuyo').value)||0;
-  var shakai = parseFloat(document.getElementById('shakai').value)||0;
-  var s1 = parseFloat(document.getElementById('seimei1').value)||0;
-  var s2 = parseFloat(document.getElementById('seimei2').value)||0;
-  var s3 = parseFloat(document.getElementById('seimei3').value)||0;
-  var haigusha = parseFloat(document.getElementById('haigusha').value)||0;
-  var f1 = parseInt(document.getElementById('f1').value)||0;
-  var f2 = parseInt(document.getElementById('f2').value)||0;
-  var f2b = parseInt(document.getElementById('f2b').value)||0;
-  var f3 = parseInt(document.getElementById('f3').value)||0;
-  var gensenTax = parseFloat(document.getElementById('gensenTax').value)||0;
-  var hsbFee = parseFloat(document.getElementById('hsbFee').value)||0;
-  var priorYear = document.getElementById('priorYear').checked;
+  var t=T[lang];
+  var kyuyo=parseFloat(document.getElementById('kyuyo').value)||0;
+  var shakai=parseFloat(document.getElementById('shakai').value)||0;
+  var s1=parseFloat(document.getElementById('seimei1').value)||0;
+  var s2=parseFloat(document.getElementById('seimei2').value)||0;
+  var s3=parseFloat(document.getElementById('seimei3').value)||0;
+  var spVal=(document.getElementById('haigusha').value||'0,0').split(',');
+  var haigu_s=parseFloat(spVal[0])||0; // 所得税
+  var haigu_j=parseFloat(spVal[1])||0; // 住民税
+  // Group 1: 一般扶養 16-18 & 23-69  → 所得税 38万 / 住民税 33万
+  var f1=parseInt(document.getElementById('f1').value)||0;
+  // Group 2: 特定扶養 19-22          → 所得税 63万 / 住民税 45万
+  var f2=parseInt(document.getElementById('f2').value)||0;
+  // Group 3: 老人扶養 70+            → 所得税 48万 / 住民税 38万
+  var f3=parseInt(document.getElementById('f3').value)||0;
+  var gensenTax=parseFloat(document.getElementById('gensenTax').value)||0;
+  var hsbFee=parseFloat(document.getElementById('hsbFee').value)||0;
+  var prior=document.getElementById('priorYear').checked;
 
-  if(!kyuyo){ alert(t.alertKyuyo); return; }
+  if(!kyuyo){alert(t.alertKyuyo);return;}
 
-  // 給与所得 tính trực tiếp theo bảng Reiwa 7
-  var shotoku = Math.max(0, Math.round(calcKyuyoShotoku(kyuyo)));
-  var kojo = Math.max(0, kyuyo - shotoku); // 給与所得控除 = 支払金額 - 給与所得 (hiển thị tham khảo)
-  var seimeiTotal = Math.min(calcSeimeiOne(s1)+calcSeimeiOne(s2)+calcSeimeiOne(s3), 120000);
-  var fuyouAmt = (f1+f3)*380000 + (f2+f2b)*630000;
-  var kiso = calcKisoKojo(shotoku, priorYear);
-  var totalKojo = shakai + seimeiTotal + haigusha + fuyouAmt + kiso;
-  var kazeiRaw = Math.max(0, shotoku - totalKojo);
-  var kazei = Math.floor(kazeiRaw/1000)*1000;
-  var baseTax = calcShotokuZei(kazei);
-  var fukkoTax = Math.round(baseTax * 1.021);
-  var juminS = Math.round(kazei * 0.1);
-  var juminTotal = juminS + 5000;
-  var totalTax = fukkoTax + juminTotal;
-  var taxRate = kazei > 0 ? (baseTax/kazei*100) : 0;
-  var nextYear = new Date().getFullYear() + 1;
+  // 給与所得
+  var shotoku=Math.max(0,Math.round(calcKyuyoShotoku(kyuyo)));
+  var kojo=Math.max(0,kyuyo-shotoku);
+  var seimeiTotal=Math.min(calcSeimeiOne(s1)+calcSeimeiOne(s2)+calcSeimeiOne(s3),120000);
 
-  document.getElementById('m-shotoku').textContent = fmt(shotoku);
-  document.getElementById('m-kazei').textContent = fmt(kazei);
-  document.getElementById('m-fukko').textContent = fmt(fukkoTax);
-  document.getElementById('m-jumin').textContent = fmt(juminTotal);
-  document.getElementById('ts-fukko').textContent = fmt(fukkoTax);
-  document.getElementById('ts-fukko-sub').innerHTML = t.incSub(fmt(Math.round(baseTax)), taxRate.toFixed(1));
-  document.getElementById('ts-jumin').textContent = fmt(juminTotal);
-  document.getElementById('ts-jumin-sub').innerHTML = t.jumSub(fmt(juminS), nextYear);
-  document.getElementById('b-kyuyo').textContent = fmt(kyuyo);
-  document.getElementById('b-kojo').textContent = '− ' + fmt(kojo);
-  document.getElementById('b-shotoku').textContent = fmt(shotoku);
-  document.getElementById('b-shakai').textContent = '− ' + fmt(shakai);
-  document.getElementById('b-seimei').textContent = '− ' + fmt(seimeiTotal);
-  document.getElementById('b-haigusha').textContent = '− ' + fmt(haigusha);
-  document.getElementById('b-fuyou').textContent = '− ' + fmt(fuyouAmt);
-  document.getElementById('b-kiso').textContent = '− ' + fmt(kiso);
-  document.getElementById('b-kiso-label').textContent = priorYear ? '(~Reiwa 6)' : '(Reiwa 7)';
-  document.getElementById('b-kazei2').textContent = fmt(kazei);
-  document.getElementById('b-income').textContent = fmt(Math.round(baseTax));
-  document.getElementById('b-fukko-amt').textContent = fmt(fukkoTax);
-  document.getElementById('b-income-total').textContent = fmt(fukkoTax);
-  document.getElementById('b-jumin-s').textContent = fmt(juminS);
-  document.getElementById('b-jumin-total').textContent = fmt(juminTotal);
-  document.getElementById('b-total').textContent = fmt(totalTax);
+  // ── 所得税 計算 ──────────────────────────────────
+  // 一般38万 / 特定63万 / 老人48万
+  var fuyou_s=f1*380000+f2*630000+f3*480000;
+  var kiso_s=calcKisoShotoku(shotoku,prior);
+  var totalKojo_s=shakai+seimeiTotal+haigu_s+fuyou_s+kiso_s;
+  var kazeiRaw_s=Math.max(0,shotoku-totalKojo_s);
+  var kazei_s=Math.floor(kazeiRaw_s/1000)*1000;
+  var baseTax=calcShotokuZei(kazei_s);
+  var fukkoTax=Math.round(baseTax*1.021);
 
-  var kisoBox = document.getElementById('kiso-info');
-  if(priorYear){
+  // ── 住民税 計算 (独自の控除額) ───────────────────
+  // 一般33万 / 特定45万 / 老人38万
+  var fuyou_j=f1*330000+f2*450000+f3*380000;
+  var kiso_j=calcKisoJumin(shotoku,prior);
+  var totalKojo_j=shakai+seimeiTotal+haigu_j+fuyou_j+kiso_j;
+  var kazeiRaw_j=Math.max(0,shotoku-totalKojo_j);
+  var kazei_j=Math.floor(kazeiRaw_j/1000)*1000;
+  var juminS=Math.round(kazei_j*0.1);
+  var juminTotal=juminS+5000;
+  var totalTax=fukkoTax+juminTotal;
+  var taxRate=kazei_s>0?(baseTax/kazei_s*100):0;
+  var nextYear=new Date().getFullYear()+1;
+
+  // ── Update UI ─────────────────────────────────────
+  document.getElementById('m-shotoku').textContent=fmt(shotoku);
+  document.getElementById('m-kazei').textContent=fmt(kazei_s);
+  document.getElementById('m-fukko').textContent=fmt(fukkoTax);
+  document.getElementById('m-jumin').textContent=fmt(juminTotal);
+  document.getElementById('ts-fukko').textContent=fmt(fukkoTax);
+  document.getElementById('ts-fukko-sub').innerHTML=t.incSub(fmt(Math.round(baseTax)),taxRate.toFixed(1));
+  document.getElementById('ts-jumin').textContent=fmt(juminTotal);
+  document.getElementById('ts-jumin-sub').innerHTML=t.jumSub(fmt(juminS),nextYear);
+
+  // 住民税 detail box
+  document.getElementById('jd-shotoku').textContent=fmt(shotoku);
+  document.getElementById('jd-shakai').textContent='− '+fmt(shakai);
+  document.getElementById('jd-seimei').textContent='− '+fmt(seimeiTotal);
+  document.getElementById('jd-haigusha').textContent='− '+fmt(haigu_j);
+  document.getElementById('jd-fuyou').textContent='− '+fmt(fuyou_j);
+  document.getElementById('jd-kiso').textContent='− '+fmt(kiso_j)+(prior?' (~Reiwa 6)':'');
+  document.getElementById('jd-kazei').textContent=fmt(kazei_j);
+  document.getElementById('jd-shotokuwari').textContent=fmt(juminS);
+  document.getElementById('jd-total').textContent=fmt(juminTotal);
+
+  // 所得税 detail
+  document.getElementById('b-kyuyo').textContent=fmt(kyuyo);
+  document.getElementById('b-kojo').textContent='− '+fmt(kojo);
+  document.getElementById('b-shotoku').textContent=fmt(shotoku);
+  document.getElementById('b-shakai').textContent='− '+fmt(shakai);
+  document.getElementById('b-seimei').textContent='− '+fmt(seimeiTotal);
+  document.getElementById('b-haigusha').textContent='− '+fmt(haigu_s);
+  document.getElementById('b-fuyou').textContent='− '+fmt(fuyou_s);
+  document.getElementById('b-kiso').textContent='− '+fmt(kiso_s);
+  document.getElementById('b-kiso-label').textContent=prior?'(~Reiwa 6)':'(Reiwa 7)';
+  document.getElementById('b-kazei2').textContent=fmt(kazei_s);
+  document.getElementById('b-income').textContent=fmt(Math.round(baseTax));
+  document.getElementById('b-fukko-amt').textContent=fmt(fukkoTax);
+  document.getElementById('b-income-total').textContent=fmt(fukkoTax);
+  document.getElementById('b-total').textContent=fmt(totalTax);
+
+  var kisoBox=document.getElementById('kiso-info');
+  if(prior){
     kisoBox.classList.remove('hidden');
-    document.getElementById('kiso-info-text').textContent = t.kisoPrior;
-  } else if(kiso !== 880000){
+    document.getElementById('kiso-info-text').textContent=t.kisoPrior;
+  } else if(kiso_s!==880000){
     kisoBox.classList.remove('hidden');
-    document.getElementById('kiso-info-text').textContent = t.kisoReiwa7 + ' ' + fmt(kiso) + ' ' + t.kisoNote7;
+    document.getElementById('kiso-info-text').textContent=t.kisoReiwa7+' '+fmt(kiso_s)+' '+t.kisoNote7;
   } else { kisoBox.classList.add('hidden'); }
 
-  lastResult = { kyuyo, shotoku, kazei, fukkoTax, baseTax, juminS, juminTotal, totalTax, gensenTax, hsbFee, kiso, fuyouAmt, seimeiTotal, taxRate };
+  lastResult={kyuyo,shotoku,kazei_s,kazei_j,fukkoTax,baseTax,juminS,juminTotal,totalTax,gensenTax,hsbFee,kiso_s,kiso_j,fuyou_s,fuyou_j,seimeiTotal,taxRate};
   document.getElementById('resultSection').classList.remove('result-hidden');
 
-  var kakBlock = document.getElementById('kakutei-block');
-  var noRef = document.getElementById('no-refund');
-  var noGen = document.getElementById('no-gensen');
-
+  var kakBlock=document.getElementById('kakutei-block');
+  var noRef=document.getElementById('no-refund');
+  var noGen=document.getElementById('no-gensen');
   if(!gensenTax){
-    kakBlock.classList.add('hidden'); noRef.classList.add('hidden'); noGen.classList.remove('hidden');
+    kakBlock.classList.add('hidden');noRef.classList.add('hidden');noGen.classList.remove('hidden');
   } else {
     noGen.classList.add('hidden');
-    var refund = gensenTax - fukkoTax;
-    if(refund > 0){
-      kakBlock.classList.remove('hidden'); noRef.classList.add('hidden');
-      document.getElementById('k-amount').textContent = fmt(refund);
-      document.getElementById('k-sub').textContent = t.refundSub(fmt(gensenTax), fmt(fukkoTax), fmt(refund));
-      var feeBox = document.getElementById('fee-info');
-      if(hsbFee > 0){
-        var net = refund - hsbFee;
+    var refund=gensenTax-fukkoTax;
+    if(refund>0){
+      kakBlock.classList.remove('hidden');noRef.classList.add('hidden');
+      document.getElementById('k-amount').textContent=fmt(refund);
+      document.getElementById('k-sub').textContent=t.refundSub(fmt(gensenTax),fmt(fukkoTax),fmt(refund));
+      var feeBox=document.getElementById('fee-info');
+      if(hsbFee>0){
+        var net=refund-hsbFee;
         feeBox.classList.remove('hidden');
-        var ico = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="flex-shrink:0;margin-top:1px">';
-        if(net > 0){
-          feeBox.className = 'info-box ib-success';
-          feeBox.innerHTML = ico+'<path d="M12 2v20M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg><span>'+t.feeOk(fmt(hsbFee), fmt(net))+'</span>';
-        } else {
-          feeBox.className = 'info-box ib-danger';
-          feeBox.innerHTML = ico+'<path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg><span>'+t.feeOver(fmt(hsbFee), fmt(refund))+'</span>';
-        }
-      } else { document.getElementById('fee-info').classList.add('hidden'); }
+        var ico='<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="flex-shrink:0;margin-top:1px">';
+        if(net>0){feeBox.className='info-box ib-success';feeBox.innerHTML=ico+'<path d="M12 2v20M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg><span>'+t.feeOk(fmt(hsbFee),fmt(net))+'</span>';}
+        else{feeBox.className='info-box ib-danger';feeBox.innerHTML=ico+'<path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg><span>'+t.feeOver(fmt(hsbFee),fmt(refund))+'</span>';}
+      } else {document.getElementById('fee-info').classList.add('hidden');}
     } else {
-      kakBlock.classList.add('hidden'); noRef.classList.remove('hidden');
+      kakBlock.classList.add('hidden');noRef.classList.remove('hidden');
     }
   }
-  document.getElementById('resultSection').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  document.getElementById('resultSection').scrollIntoView({behavior:'smooth',block:'start'});
 }
 
-// ─── COPY ───────────────────────────────────────────────────────
 function copyResult(){
-  var r = lastResult;
-  if(!r.kyuyo) return;
-  var t = T[lang];
-  var refund = r.gensenTax > 0 ? Math.max(0, r.gensenTax - r.fukkoTax) : 0;
-  var lines = [
+  var r=lastResult;if(!r.kyuyo)return;
+  var t=T[lang];
+  var refund=r.gensenTax>0?Math.max(0,r.gensenTax-r.fukkoTax):0;
+  var lines=[
     t.copyHeader,
-    '支払金額:       '+fmt(r.kyuyo),
-    '給与所得:       '+fmt(r.shotoku),
-    '課税所得金額:   '+fmt(r.kazei),
-    '基礎控除:       '+fmt(r.kiso),
-    '扶養控除:       '+fmt(r.fuyouAmt),
-    '生命保険料控除: '+fmt(r.seimeiTotal),
+    '支払金額:         '+fmt(r.kyuyo),
+    '給与所得:         '+fmt(r.shotoku),
     '',
     '[ 所得税 (国税) ]',
-    '  所得税:       '+fmt(Math.round(r.baseTax))+' ('+r.taxRate.toFixed(1)+'%)',
-    '  復興税:       '+fmt(r.fukkoTax),
-    '  → 合計:      '+fmt(r.fukkoTax),
+    '  課税所得:       '+fmt(r.kazei_s),
+    '  基礎控除:       '+fmt(r.kiso_s),
+    '  扶養控除:       '+fmt(r.fuyou_s),
+    '  所得税:         '+fmt(Math.round(r.baseTax))+' ('+r.taxRate.toFixed(1)+'%)',
+    '  復興税:         '+fmt(r.fukkoTax),
     '',
     '[ 住民税 (地方税) ]',
-    '  所得割:       '+fmt(r.juminS),
-    '  均等割:        5,000¥',
-    '  → 合計:      '+fmt(r.juminTotal),
+    '  課税所得:       '+fmt(r.kazei_j),
+    '  基礎控除:       '+fmt(r.kiso_j),
+    '  扶養控除:       '+fmt(r.fuyou_j),
+    '  所得割:         '+fmt(r.juminS),
+    '  均等割:          5,000¥',
+    '  → 住民税合計:  '+fmt(r.juminTotal),
     '',
-    '合計納税額:     '+fmt(r.totalTax),
-    r.gensenTax ? '源泉徴収税額:   '+fmt(r.gensenTax) : '',
-    refund > 0 ? '→ 還付見込み:  '+fmt(refund) : '→ 還付なし',
+    '合計納税額:       '+fmt(r.totalTax),
+    r.gensenTax?'源泉徴収税額:     '+fmt(r.gensenTax):'',
+    refund>0?'→ 還付見込み:    '+fmt(refund):'→ 還付なし',
   ].filter(Boolean).join('\n');
   navigator.clipboard.writeText(lines).then(function(){
-    var btn = event.target.closest('button');
-    var orig = btn.innerHTML;
-    btn.textContent = '✓';
-    setTimeout(function(){ btn.innerHTML = orig; }, 2000);
+    var btn=event.target.closest('button');var orig=btn.innerHTML;
+    btn.textContent='✓';setTimeout(function(){btn.innerHTML=orig;},2000);
   }).catch(function(){});
 }
 
-// Init default language
-setLang('ja');
+document.addEventListener('DOMContentLoaded', function(){ setLang('ja'); });
 </script>
 </body>
 </html>
